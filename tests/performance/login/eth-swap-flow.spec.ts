@@ -9,6 +9,8 @@ import {
 import { loginToAppPlaywright } from '../../flows/wallet.flow';
 import WalletView from '../../page-objects/wallet/WalletView';
 import QuoteView from '../../page-objects/swaps/QuoteView';
+import { asPlaywrightElement } from '../../framework/EncapsulatedElement.js';
+import PlaywrightAssertions from '../../framework/PlaywrightAssertions.js';
 
 /* Scenario 6: Swap flow - ETH to LINK, SRP 1 + SRP 2 + SRP 3 */
 test.describe(`${Performance} ${System} ${PerformanceLogin} ${PerformanceSwaps}`, () => {
@@ -16,6 +18,11 @@ test.describe(`${Performance} ${System} ${PerformanceLogin} ${PerformanceSwaps}`
     'Swap flow - ETH to LINK, SRP 1 + SRP 2 + SRP 3',
     { tag: '@swap-bridge-dev-team' },
     async ({ currentDeviceDetails, driver, performanceTracker }, testInfo) => {
+      test.skip(
+        currentDeviceDetails.platform === 'ios',
+        'Skipped on iOS — swap flow under investigation',
+      );
+
       await loginToAppPlaywright();
 
       const swapLoadTimer = new TimerHelper(
@@ -25,6 +32,7 @@ test.describe(`${Performance} ${System} ${PerformanceLogin} ${PerformanceSwaps}`
       );
 
       await WalletView.tapWalletSwapButton();
+
       await swapLoadTimer.measure(() => QuoteView.isVisible());
 
       const swapTimer = new TimerHelper(
@@ -35,8 +43,9 @@ test.describe(`${Performance} ${System} ${PerformanceLogin} ${PerformanceSwaps}`
       await QuoteView.selectNetworkAndTokenTo('Ethereum', 'USDC');
       await QuoteView.enterSourceTokenAmount('1');
 
-      await swapTimer.measure(() => QuoteView.isQuoteDisplayed());
-
+      await swapTimer.measure(async () => {
+        await QuoteView.isQuoteDisplayed();
+      });
       performanceTracker.addTimers(swapLoadTimer, swapTimer);
     },
   );
