@@ -122,7 +122,7 @@ describe('tronAdapter', () => {
       expect(slice).toEqual({
         chains: ['tron:0x94a9059e'],
         methods: ['tron_signTransaction', 'tron_signMessage'],
-        events: [],
+        events: ['accountsChanged'],
         accounts: ['tron:0x94a9059e:TJ4'],
       });
     });
