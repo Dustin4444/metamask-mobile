@@ -240,6 +240,26 @@ describe('WalletConnect Utils', () => {
         },
       });
     });
+
+    it('filters out non-EVM chains from the eip155 namespace', async () => {
+      const { getPermittedChains } = jest.requireMock('../Permissions');
+      getPermittedChains.mockResolvedValueOnce([
+        'eip155:1',
+        'tron:728126428',
+        'eip155:137',
+      ]);
+
+      const result = await getScopedPermissions({ channelId: 'test' });
+      expect(result.eip155.chains).toEqual(['eip155:1', 'eip155:137']);
+      expect(result.eip155.accounts).toEqual([
+        'eip155:1:0x123',
+        'eip155:137:0x123',
+      ]);
+      // Must NOT contain tron chains paired with EVM addresses
+      expect(result.eip155.accounts).not.toEqual(
+        expect.arrayContaining([expect.stringContaining('tron:')]),
+      );
+    });
   });
 
   describe('getHostname', () => {

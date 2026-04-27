@@ -159,6 +159,53 @@ describe('tronAdapter', () => {
 
       expect(slice?.accounts).toEqual(['tron:728126428:TPERMITTED']);
     });
+
+    it('includes testnet chains when dapp requests them', () => {
+      mockListAccounts.mockReturnValue([
+        { type: TrxAccountType.Eoa, address: 'TADDR1' },
+      ]);
+
+      const slice = tronAdapter.buildNamespaceSlice({
+        proposal: {
+          requiredNamespaces: {
+            tron: {
+              chains: ['tron:728126428', 'tron:3448148188'],
+              methods: ['tron_signTransaction'],
+              events: [],
+            },
+          },
+        },
+        channelId: 'channel',
+      });
+
+      expect(slice?.chains).toEqual(['tron:728126428', 'tron:3448148188']);
+      expect(slice?.accounts).toEqual([
+        'tron:728126428:TADDR1',
+        'tron:3448148188:TADDR1',
+      ]);
+    });
+
+    it('includes Shasta testnet chain when dapp requests it', () => {
+      mockListAccounts.mockReturnValue([
+        { type: TrxAccountType.Eoa, address: 'TADDR1' },
+      ]);
+
+      const slice = tronAdapter.buildNamespaceSlice({
+        proposal: {
+          optionalNamespaces: {
+            tron: {
+              chains: ['tron:2494104990'],
+              methods: ['tron_signTransaction'],
+              events: [],
+            },
+          },
+        },
+        channelId: 'channel',
+      });
+
+      expect(slice?.chains).toEqual(['tron:2494104990']);
+      expect(slice?.accounts).toEqual(['tron:2494104990:TADDR1']);
+    });
   });
 
   it('exposes Tron request and response mappers', () => {

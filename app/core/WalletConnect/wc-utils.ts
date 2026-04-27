@@ -261,7 +261,15 @@ export const getScopedPermissions = async ({
   channelId: string;
 }) => {
   const approvedAccounts = getPermittedAccounts(channelId);
-  const chains = await getPermittedChains(channelId);
+  const allChains = await getPermittedChains(channelId);
+
+  // getPermittedAccounts returns EVM hex addresses only, so we must filter
+  // chains to the EIP-155 namespace. Without this filter, non-EVM chains
+  // (e.g. tron:728126428) would be paired with EVM addresses, producing
+  // invalid CAIP-10 account IDs such as `tron:728126428:0xABC…`.
+  const chains = allChains.filter((chain) =>
+    chain.startsWith(`${KnownCaipNamespace.Eip155}:`),
+  );
 
   DevLogger.log(
     `WC::getScopedPermissions for ${channelId}, found accounts:`,
