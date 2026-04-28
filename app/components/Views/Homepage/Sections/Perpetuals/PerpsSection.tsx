@@ -582,4 +582,5 @@ export const PerpsSection = forwardRef<SectionRefreshHandle, PerpsSectionProps>(
   },
 );
 
+// test smart selector
 export default PerpsSection;
