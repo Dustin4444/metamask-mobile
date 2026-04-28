@@ -61,7 +61,7 @@ import HomepageSectionUnrealizedPnlRow, {
 import { useHomepageTrendingTransactionActiveAbTests } from '../../hooks/useHomepageTrendingTransactionActiveAbTests';
 import type { TransactionActiveAbTestEntry } from '../../../../../util/transactions/transaction-active-ab-test-attribution-registry';
 
-const MAX_ITEMS = 6;
+const MAX_ITEMS = 5;
 const MAX_TRENDING_MARKETS = 5;
 const HOMEPAGE_THROTTLE_MS = 5000;
 
