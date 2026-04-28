@@ -15,6 +15,7 @@ export {
 
 export {
   addNonEvmNamespacesIfRequested,
+  buildApprovedNamespaces,
   proposalReferencesNamespace,
 } from './namespaces';
 

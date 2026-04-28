@@ -12,6 +12,21 @@ import DevLogger from '../../SDKConnect/utils/DevLogger';
 import { getAllNonEvmAdapters } from './registry';
 import type { NamespaceConfig, ProposalLike } from './types';
 
+const WALLET_PREFIX = `${KnownCaipNamespace.Wallet}:` as const;
+
+const getNamespaceKey = (scopeOrChain: string): string | undefined => {
+  if (!scopeOrChain) {
+    return undefined;
+  }
+
+  if (scopeOrChain.startsWith(WALLET_PREFIX)) {
+    const delegatedNamespace = scopeOrChain.slice(WALLET_PREFIX.length);
+    return delegatedNamespace.length > 0 ? delegatedNamespace : undefined;
+  }
+
+  return scopeOrChain.split(':')[0];
+};
+
 const collectScopeKeys = (proposal: ProposalLike): string[] => [
   ...Object.keys(proposal.requiredNamespaces ?? {}),
   ...Object.keys(proposal.optionalNamespaces ?? {}),
@@ -35,10 +50,41 @@ export const proposalReferencesNamespace = (
   proposal: ProposalLike,
   namespace: string,
 ): boolean => {
-  if (collectScopeKeys(proposal).includes(namespace)) return true;
+  if (
+    collectScopeKeys(proposal).some(
+      (scope) => getNamespaceKey(scope) === namespace,
+    )
+  ) {
+    return true;
+  }
   return collectAllChains(proposal).some(
-    (chain) => chain.split(':')[0] === namespace,
+    (chain) => getNamespaceKey(chain) === namespace,
   );
+};
+
+/**
+ * Build approved namespaces for a session proposal by starting from the
+ * already-prepared EIP-155 namespace and injecting every requested non-EVM
+ * namespace.
+ */
+export const buildApprovedNamespaces = ({
+  namespaces,
+  proposal,
+  channelId,
+}: {
+  namespaces: Record<string, NamespaceConfig>;
+  proposal: ProposalLike;
+  channelId: string;
+}): Record<string, NamespaceConfig> => {
+  const approvedNamespaces = { ...namespaces };
+
+  addNonEvmNamespacesIfRequested({
+    namespaces: approvedNamespaces,
+    proposal,
+    channelId,
+  });
+
+  return approvedNamespaces;
 };
 
 /**
@@ -48,7 +94,7 @@ export const proposalReferencesNamespace = (
  *
  * EVM namespaces already present in `namespaces` are never modified.
  */
-export const addNonEvmNamespacesIfRequested = ({
+export function addNonEvmNamespacesIfRequested({
   namespaces,
   proposal,
   channelId,
@@ -56,7 +102,7 @@ export const addNonEvmNamespacesIfRequested = ({
   namespaces: Record<string, NamespaceConfig>;
   proposal: ProposalLike;
   channelId: string;
-}): void => {
+}): void {
   for (const adapter of getAllNonEvmAdapters()) {
     if (adapter.namespace === KnownCaipNamespace.Eip155) {
       // Defensive guard: EVM is owned by the main code path and must not
@@ -82,4 +128,4 @@ export const addNonEvmNamespacesIfRequested = ({
       namespaces[adapter.namespace] = slice;
     }
   }
-};
+}

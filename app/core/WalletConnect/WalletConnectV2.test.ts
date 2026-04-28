@@ -233,10 +233,12 @@ jest.mock('./wc-utils', () => ({
 }));
 
 // Mock for the appended `Tron namespace` describe block. EVM proposal tests
-// above are unaffected: `addNonEvmNamespacesIfRequested` is a no-op that
-// does not modify the namespaces map produced by `getScopedPermissions`.
+// above are unaffected: `buildApprovedNamespaces` returns the same map by
+// default and can be customized per test.
 jest.mock('./multichain', () => ({
-  addNonEvmNamespacesIfRequested: jest.fn(),
+  buildApprovedNamespaces: jest.fn(
+    ({ namespaces }: { namespaces: Record<string, unknown> }) => namespaces,
+  ),
 }));
 
 jest.mock('@walletconnect/core', () => ({
@@ -2246,25 +2248,26 @@ describe('WC2Manager', () => {
   // ─────────────────────────────────────────────────────────────────────
   describe('Tron namespace', () => {
     const multichain = jest.requireMock('./multichain') as {
-      addNonEvmNamespacesIfRequested: jest.Mock;
+      buildApprovedNamespaces: jest.Mock;
     };
 
-    let manager: WC2Manager;
-    let mockApproveSession: jest.Mock;
+    let tronManager: WC2Manager;
+    let tronMockApproveSession: jest.Mock;
 
     beforeEach(async () => {
       jest.clearAllMocks();
-      multichain.addNonEvmNamespacesIfRequested.mockImplementation(
-        ({ namespaces }: { namespaces: Record<string, unknown> }) => {
-          namespaces.tron = {
+      multichain.buildApprovedNamespaces.mockImplementation(
+        ({ namespaces }: { namespaces: Record<string, unknown> }) => ({
+          ...namespaces,
+          tron: {
             chains: ['tron:728126428'],
             methods: ['tron_signTransaction', 'tron_signMessage'],
             events: [],
             accounts: ['tron:728126428:TJ4Example'],
-          };
-        },
+          },
+        }),
       );
-      mockApproveSession = jest.fn().mockResolvedValue({
+      tronMockApproveSession = jest.fn().mockResolvedValue({
         topic: 'tron-topic',
         pairingTopic: 'tron-pairing',
         peer: {
@@ -2279,13 +2282,13 @@ describe('WC2Manager', () => {
       (WC2Manager as any).instance = undefined;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (WC2Manager as any)._initialized = false;
-      manager = (await WC2Manager.init({})) as WC2Manager;
-      const web3Wallet = (manager as unknown as { web3Wallet: IWalletKit })
+      tronManager = (await WC2Manager.init({})) as WC2Manager;
+      const web3Wallet = (tronManager as unknown as { web3Wallet: IWalletKit })
         .web3Wallet;
-      (web3Wallet.approveSession as jest.Mock) = mockApproveSession;
+      (web3Wallet.approveSession as jest.Mock) = tronMockApproveSession;
     });
 
-    it('invokes addNonEvmNamespacesIfRequested with the proposal params', async () => {
+    it('invokes buildApprovedNamespaces with the proposal params', async () => {
       const proposal = {
         id: 1,
         params: {
@@ -2320,12 +2323,10 @@ describe('WC2Manager', () => {
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await manager.onSessionProposal(proposal as any);
+      await tronManager.onSessionProposal(proposal as any);
 
-      expect(multichain.addNonEvmNamespacesIfRequested).toHaveBeenCalledTimes(
-        1,
-      );
-      const call = multichain.addNonEvmNamespacesIfRequested.mock.calls[0][0];
+      expect(multichain.buildApprovedNamespaces).toHaveBeenCalledTimes(1);
+      const call = multichain.buildApprovedNamespaces.mock.calls[0][0];
       expect(call.proposal).toBe(proposal.params);
       expect(call.channelId).toBe('tron-pairing');
       // EVM namespaces still produced upstream by getScopedPermissions.
@@ -2361,9 +2362,9 @@ describe('WC2Manager', () => {
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await manager.onSessionProposal(proposal as any);
+      await tronManager.onSessionProposal(proposal as any);
 
-      expect(mockApproveSession).toHaveBeenCalledWith(
+      expect(tronMockApproveSession).toHaveBeenCalledWith(
         expect.objectContaining({
           namespaces: expect.objectContaining({
             tron: expect.objectContaining({

@@ -48,7 +48,7 @@ import {
 import WalletConnect2Session from './WalletConnect2Session';
 import { CaipChainId } from '@metamask/utils';
 import NavigationService from '../NavigationService';
-import { addNonEvmNamespacesIfRequested } from './multichain';
+import { buildApprovedNamespaces } from './multichain';
 const { PROJECT_ID } = AppConstants.WALLET_CONNECT;
 export const isWC2Enabled =
   typeof PROJECT_ID === 'string' && PROJECT_ID?.length > 0;
@@ -676,14 +676,11 @@ export class WC2Manager {
         walletChainIdDecimal,
       });
 
-      // Use getScopedPermissions to get properly formatted namespaces
-      const namespaces = await getScopedPermissions({ channelId });
-
-      // Inject every non-EVM namespace the dapp asked for.
-      // No-op when the proposal references
-      // only EVM. EVM namespaces built above are never modified.
-      addNonEvmNamespacesIfRequested({
-        namespaces,
+      // Build approved namespaces in one place so non-EVM namespace
+      // resolution (including delegated wallet:<namespace> scopes)
+      // is applied consistently during session approval.
+      const namespaces = buildApprovedNamespaces({
+        namespaces: await getScopedPermissions({ channelId }),
         proposal: proposal.params,
         channelId,
       });
@@ -719,9 +716,14 @@ export class WC2Manager {
         accounts: approvedAccounts,
       });
 
-      // Check if the chain is in the approved chains list before emitting event
+      // Only emit chainChanged when eip155 namespace explicitly allows it.
       const caipChainId = `eip155:${walletChainIdDecimal}` as CaipChainId;
-      const approvedChains = namespaces?.eip155?.chains || [];
+      const activeNamespaces = activeSession.namespaces ?? namespaces;
+      const approvedChains = activeNamespaces?.eip155?.chains || [];
+      const approvedEvents = activeNamespaces?.eip155?.events || [];
+      const canEmitChainChanged =
+        approvedChains.includes(caipChainId) &&
+        approvedEvents.includes('chainChanged');
 
       DevLogger.log(`WC2::session_proposal emitSessionEvent`, {
         topic: activeSession.topic,
@@ -731,16 +733,20 @@ export class WC2Manager {
         },
         chainId: caipChainId,
         approvedChains,
+        approvedEvents,
+        canEmitChainChanged,
       });
 
-      await this.web3Wallet.emitSessionEvent({
-        topic: activeSession.topic,
-        event: {
-          name: 'chainChanged',
-          data: walletChainIdHex,
-        },
-        chainId: caipChainId,
-      });
+      if (canEmitChainChanged) {
+        await this.web3Wallet.emitSessionEvent({
+          topic: activeSession.topic,
+          event: {
+            name: 'chainChanged',
+            data: walletChainIdHex,
+          },
+          chainId: caipChainId,
+        });
+      }
 
       if (deeplink) {
         session.redirect('onSessionProposal');
