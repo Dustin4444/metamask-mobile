@@ -67,8 +67,19 @@ const snapMethodMiddlewareBuilder = (
   controllerMessenger: RootExtendedMessenger,
   origin: string,
   subjectType: SubjectType,
-) =>
-  createSnapsMethodMiddleware(subjectType === SubjectType.Snap, {
+) => {
+  // The messenger 1.2 typings overload `.call`'s `this` per action, which makes
+  // partial application via `.bind` reject under strict checking. This helper
+  // re-applies the call with the same `this` for the tightly-typed pre-bound
+  // callbacks below.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const callMessenger = ((...args: any[]) =>
+    (
+      controllerMessenger.call as (
+        ...callArgs: unknown[]
+      ) => unknown
+    )(...args)) as typeof controllerMessenger.call;
+  return createSnapsMethodMiddleware(subjectType === SubjectType.Snap, {
     getUnlockPromise: () => {
       if (engineContext.KeyringController.isUnlocked()) {
         return Promise.resolve();
@@ -81,8 +92,7 @@ const snapMethodMiddlewareBuilder = (
         );
       });
     },
-    getSnaps: controllerMessenger.call.bind(
-      controllerMessenger,
+    getSnaps: callMessenger.bind(undefined,
       SnapControllerGetPermittedSnapsAction,
       origin,
     ),
@@ -100,13 +110,11 @@ const snapMethodMiddlewareBuilder = (
       origin,
     ),
     getAllowedKeyringMethods: keyringSnapPermissionsBuilder(origin),
-    getSnapFile: controllerMessenger.call.bind(
-      controllerMessenger,
+    getSnapFile: callMessenger.bind(undefined,
       SnapControllerGetSnapFileAction,
       origin as SnapId,
     ),
-    installSnaps: controllerMessenger.call.bind(
-      controllerMessenger,
+    installSnaps: callMessenger.bind(undefined,
       SnapControllerInstallSnapsAction,
       origin,
     ),
@@ -115,13 +123,11 @@ const snapMethodMiddlewareBuilder = (
       origin,
       RestrictedMethods.wallet_snap,
     ),
-    createInterface: controllerMessenger.call.bind(
-      controllerMessenger,
+    createInterface: callMessenger.bind(undefined,
       SnapInterfaceControllerCreateInterfaceAction,
       origin as SnapId,
     ),
-    updateInterface: controllerMessenger.call.bind(
-      controllerMessenger,
+    updateInterface: callMessenger.bind(undefined,
       SnapInterfaceControllerUpdateInterfaceAction,
       origin as SnapId,
     ),
@@ -137,39 +143,32 @@ const snapMethodMiddlewareBuilder = (
         origin as SnapId,
         id,
       ),
-    resolveInterface: controllerMessenger.call.bind(
-      controllerMessenger,
+    resolveInterface: callMessenger.bind(undefined,
       SnapInterfaceControllerResolveInterfaceAction,
       origin as SnapId,
     ),
-    getSnap: controllerMessenger.call.bind(
-      controllerMessenger,
+    getSnap: callMessenger.bind(undefined,
       SnapControllerGetSnapAction,
     ),
     trackError: (error: Error) => captureException(error),
     trackEvent: trackSnapEvent,
-    openWebSocket: controllerMessenger.call.bind(
-      controllerMessenger,
+    openWebSocket: callMessenger.bind(undefined,
       WebSocketServiceOpenAction,
       origin as SnapId,
     ),
-    closeWebSocket: controllerMessenger.call.bind(
-      controllerMessenger,
+    closeWebSocket: callMessenger.bind(undefined,
       WebSocketServiceCloseAction,
       origin as SnapId,
     ),
-    sendWebSocketMessage: controllerMessenger.call.bind(
-      controllerMessenger,
+    sendWebSocketMessage: callMessenger.bind(undefined,
       WebSocketServiceSendMessageAction,
       origin as SnapId,
     ),
-    getWebSockets: controllerMessenger.call.bind(
-      controllerMessenger,
+    getWebSockets: callMessenger.bind(undefined,
       WebSocketServiceGetAllAction,
       origin as SnapId,
     ),
-    updateInterfaceState: controllerMessenger.call.bind(
-      controllerMessenger,
+    updateInterfaceState: callMessenger.bind(undefined,
       SnapInterfaceControllerUpdateInterfaceStateAction,
       origin as SnapId,
     ),
@@ -225,18 +224,15 @@ const snapMethodMiddlewareBuilder = (
         })
         .filter(Boolean);
     },
-    clearSnapState: controllerMessenger.call.bind(
-      controllerMessenger,
+    clearSnapState: callMessenger.bind(undefined,
       SnapControllerClearSnapStateAction,
       origin as SnapId,
     ),
-    getSnapState: controllerMessenger.call.bind(
-      controllerMessenger,
+    getSnapState: callMessenger.bind(undefined,
       SnapControllerGetSnapStateAction,
       origin as SnapId,
     ),
-    updateSnapState: controllerMessenger.call.bind(
-      controllerMessenger,
+    updateSnapState: callMessenger.bind(undefined,
       SnapControllerUpdateSnapStateAction,
       origin as SnapId,
     ),
@@ -247,27 +243,25 @@ const snapMethodMiddlewareBuilder = (
         ...event,
         snapId: origin as SnapId,
       }),
-    cancelBackgroundEvent: controllerMessenger.call.bind(
-      controllerMessenger,
+    cancelBackgroundEvent: callMessenger.bind(undefined,
       CronjobControllerCancelAction,
       origin as SnapId,
     ),
-    getBackgroundEvents: controllerMessenger.call.bind(
-      controllerMessenger,
+    getBackgroundEvents: callMessenger.bind(undefined,
       CronjobControllerGetAction,
       origin as SnapId,
     ),
-    getNetworkConfigurationByChainId: controllerMessenger.call.bind(
-      controllerMessenger,
+    getNetworkConfigurationByChainId: callMessenger.bind(undefined,
       'NetworkController:getNetworkConfigurationByChainId',
     ),
-    getNetworkClientById: controllerMessenger.call.bind(
-      controllerMessenger,
+    getNetworkClientById: callMessenger.bind(
+      undefined,
       'NetworkController:getNetworkClientById',
     ),
     startTrace: trace,
     endTrace,
   });
+};
 
 export default snapMethodMiddlewareBuilder;
 ///: END:ONLY_INCLUDE_IF

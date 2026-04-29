@@ -265,6 +265,7 @@ describe('useMoneyAccountWithdrawal', () => {
       },
       options: {
         origin: ORIGIN_METAMASK,
+        isInternal: true,
         requireApproval: true,
         type: 'moneyAccountWithdraw' as never,
       },

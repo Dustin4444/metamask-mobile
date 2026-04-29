@@ -114,6 +114,7 @@ function buildMusdConversionTx(params: {
     skipInitialGasEstimate: true;
     networkClientId: string;
     origin: typeof ORIGIN_METAMASK;
+    isInternal: true;
     type: TransactionType.musdConversion;
   };
 } {
@@ -139,6 +140,7 @@ function buildMusdConversionTx(params: {
       skipInitialGasEstimate: true,
       networkClientId,
       origin: ORIGIN_METAMASK,
+      isInternal: true,
       type: TransactionType.musdConversion,
     },
   };

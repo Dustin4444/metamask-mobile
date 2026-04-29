@@ -209,6 +209,7 @@ export interface MoneyAccountWithdrawResult {
   params: { to: Hex; data: Hex; value: Hex };
   options: {
     origin: typeof ORIGIN_METAMASK;
+    isInternal: boolean;
     requireApproval: boolean;
     type: TransactionType;
   };
@@ -260,6 +261,7 @@ export async function buildMoneyAccountWithdraw({
     },
     options: {
       origin: ORIGIN_METAMASK,
+      isInternal: true,
       requireApproval: true,
       type: TransactionType.moneyAccountWithdraw,
     },

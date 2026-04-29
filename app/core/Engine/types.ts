@@ -910,7 +910,9 @@ export type MessengerClientsByName = {
 export type ControllerMessenger = Messenger<
   string,
   ActionConstraint,
-  EventConstraint
+  EventConstraint,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any
 >;
 
 /**

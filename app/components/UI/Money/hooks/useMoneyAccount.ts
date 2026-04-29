@@ -92,6 +92,7 @@ export function useMoneyAccountDeposit() {
           from: primaryMoneyAccount.address as Hex,
           networkClientId,
           origin: ORIGIN_METAMASK,
+          isInternal: true,
           disableHook: true,
           disableSequential: true,
           transactions: [approveTx, depositTx],
