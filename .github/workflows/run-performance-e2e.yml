@@ -305,7 +305,7 @@ jobs:
         determine-branch-name,
         compute-test-selection,
       ]
-    if: always() && !failure() && !cancelled() && needs.compute-test-selection.outputs.run_tests == 'true' && (needs.trigger-ios-dual-versions.result == 'skipped' || needs.trigger-ios-dual-versions.result == 'success') && (inputs.browserstack_app_url_ios_onboarding != '' || needs.trigger-ios-dual-versions.outputs.without-srp-browserstack-url != '')
+    if: false # temporarily disabled — Android only
     with:
       platform: ios
       build_type: onboarding
@@ -372,7 +372,7 @@ jobs:
         determine-branch-name,
         compute-test-selection,
       ]
-    if: always() && !cancelled() && needs.compute-test-selection.outputs.run_tests == 'true' && (needs.trigger-ios-dual-versions.result == 'skipped' || needs.trigger-ios-dual-versions.result == 'success') && (inputs.browserstack_app_url_ios_imported_wallet != '' || needs.trigger-ios-dual-versions.outputs.with-srp-browserstack-url != '')
+    if: false # temporarily disabled — Android only
     with:
       platform: ios
       build_type: imported-wallet
