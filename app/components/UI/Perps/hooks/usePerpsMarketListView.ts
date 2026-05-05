@@ -38,6 +38,11 @@ interface UsePerpsMarketListViewParams {
    * @default false
    */
   showZeroVolume?: boolean;
+  /**
+   * Show markets with $0.00 or missing open interest
+   * @default showZeroVolume
+   */
+  showZeroOpenInterest?: boolean;
 }
 
 interface UsePerpsMarketListViewReturn {
@@ -107,7 +112,7 @@ interface UsePerpsMarketListViewReturn {
  * - Fetches and filters markets data
  * - Manages search state and filtering
  * - Manages sorting state and filtering
- * - Filters markets by volume validity
+ * - Filters markets by volume and open interest validity
  * - Filters markets by watchlist (favorites)
  * - Saves sort preferences to PerpsController
  * - Exposes combined filtered markets ready for display
@@ -134,9 +139,10 @@ export const usePerpsMarketListView = ({
   showWatchlistOnly = false,
   defaultMarketTypeFilter = 'all',
   showZeroVolume = false,
+  showZeroOpenInterest = showZeroVolume,
 }: UsePerpsMarketListViewParams = {}): UsePerpsMarketListViewReturn => {
   // Fetch markets data
-  // Volume filtering is handled at the data layer in usePerpsMarkets
+  // Market activity filtering is handled at the data layer in usePerpsMarkets
   const {
     markets: allMarkets,
     isLoading: isLoadingMarkets,
@@ -144,6 +150,7 @@ export const usePerpsMarketListView = ({
   } = usePerpsMarkets({
     enablePolling,
     showZeroVolume,
+    showZeroOpenInterest,
   });
 
   // Get Redux state
