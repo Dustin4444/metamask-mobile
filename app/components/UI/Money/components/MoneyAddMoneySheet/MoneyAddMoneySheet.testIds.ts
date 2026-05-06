@@ -4,4 +4,7 @@ export const MoneyAddMoneySheetTestIds = {
   DEPOSIT_FUNDS_OPTION: 'money-add-money-sheet-deposit-funds',
   MOVE_MUSD_OPTION: 'money-add-money-sheet-move-musd',
   RECEIVE_EXTERNAL_ROW: 'money-add-money-sheet-receive-external',
+  RECEIVE_EXTERNAL_ADDRESS: 'money-add-money-sheet-receive-external-address',
+  COPY_ADDRESS_BUTTON: 'money-add-money-sheet-copy-address',
+  EXPLORER_BUTTON: 'money-add-money-sheet-explorer',
 };

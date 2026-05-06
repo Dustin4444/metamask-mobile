@@ -24,6 +24,20 @@ const styleSheet = (params: { theme: Theme }) =>
     comingSoonTag: {
       borderRadius: 8,
     },
+    addressRowContent: {
+      flex: 1,
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      gap: 2,
+    },
+    addressText: {
+      color: params.theme.colors.text.alternative,
+    },
+    addressActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+    },
   });
 
 export default styleSheet;
