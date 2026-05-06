@@ -168,8 +168,7 @@ interface TokenSelectorItemProps {
   shouldShowBalance?: boolean;
   children?: React.ReactNode;
   isNoFeeAsset?: boolean;
-  pricePercentChangeText?: string;
-  pricePercentChangeTextColor?: TextColor;
+  secondaryRowContent?: React.ReactNode;
 }
 
 const isLoadingBalance = (balance?: string) =>
@@ -266,8 +265,7 @@ export const TokenSelectorItem: React.FC<TokenSelectorItemProps> = ({
   shouldShowBalance = true,
   children,
   isNoFeeAsset = false,
-  pricePercentChangeText,
-  pricePercentChangeTextColor = TextColor.Alternative,
+  secondaryRowContent,
 }) => {
   const { styles } = useStyles(createStyles, { isSelected });
   const { variant } = useABTest(
@@ -461,22 +459,15 @@ export const TokenSelectorItem: React.FC<TokenSelectorItemProps> = ({
                 style={styles.tokenNameRow}
                 gap={4}
               >
-                <Text
-                  variant={TextVariant.BodySM}
-                  color={TextColor.Alternative}
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={styles.tokenName}
-                >
-                  {token.name}
-                </Text>
-                {pricePercentChangeText && (
+                {secondaryRowContent ?? (
                   <Text
                     variant={TextVariant.BodySM}
-                    color={pricePercentChangeTextColor}
+                    color={TextColor.Alternative}
                     numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={styles.tokenName}
                   >
-                    {pricePercentChangeText}
+                    {token.name}
                   </Text>
                 )}
               </Box>
