@@ -16,6 +16,7 @@ import { PriceImpactModal } from './components/PriceImpactModal';
 import { clearStackNavigatorOptions } from '../../../constants/navigation/clearStackNavigatorOptions';
 import { TokenWarningModal } from './components/TokenWarningModal';
 import { MissingPriceModal } from './components/MissingPriceModal';
+import { HighRateAlertModal } from './components/HighRateAlertModal';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ScreenComponent = React.ComponentType<any>;
@@ -97,6 +98,10 @@ export const BridgeModalStack = () => (
     <ModalStack.Screen
       name={Routes.BRIDGE.MODALS.TOKEN_WARNING_MODAL}
       component={TokenWarningModal}
+    />
+    <ModalStack.Screen
+      name={Routes.BRIDGE.MODALS.HIGH_RATE_ALERT_MODAL}
+      component={HighRateAlertModal}
     />
   </ModalStack.Navigator>
 );
