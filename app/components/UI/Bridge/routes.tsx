@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Routes from '../../../constants/navigation/Routes';
 import { BridgeTokenSelector } from './components/BridgeTokenSelector';
 import BridgeView from './Views/BridgeView';
-import { MultiSwapTokenSelect } from './Views/MultiSwapTokenSelect';
+import { BatchSellTokenSelect } from './Views/BatchSellTokenSelect';
 import BlockExplorersModal from './components/TransactionDetails/BlockExplorersModal';
 import BlockaidModal from './components/BlockaidModal';
 import RecipientSelectorModal from './components/RecipientSelectorModal';
@@ -39,8 +39,8 @@ export const BridgeScreenStack = () => (
       options={{ title: '' }}
     />
     <Stack.Screen
-      name={Routes.BRIDGE.MULTI_SWAP_TOKEN_SELECT}
-      component={MultiSwapTokenSelect}
+      name={Routes.BRIDGE.BATCH_SELL_TOKEN_SELECT}
+      component={BatchSellTokenSelect}
       options={{ title: '' }}
     />
     <Stack.Screen
