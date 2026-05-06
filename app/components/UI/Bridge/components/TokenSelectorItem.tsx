@@ -159,6 +159,12 @@ const createStyles = ({
     },
   });
 
+interface BalanceTextProps {
+  textStyle?: StyleProp<TextStyle>;
+  textVariant: TextVariant;
+  textColor: TextColor;
+}
+
 interface TokenSelectorItemProps {
   token: BridgeToken;
   onPress: (token: BridgeToken) => void;
@@ -169,6 +175,7 @@ interface TokenSelectorItemProps {
   children?: React.ReactNode;
   isNoFeeAsset?: boolean;
   secondaryRowContent?: React.ReactNode;
+  tokenBalanceTextProps?: Partial<BalanceTextProps>;
 }
 
 const isLoadingBalance = (balance?: string) =>
@@ -192,12 +199,9 @@ const FiatBalanceView = ({
   textStyle,
   textVariant,
   textColor,
-}: {
+}: BalanceTextProps & {
   balance?: string;
   isSelected: boolean;
-  textStyle?: StyleProp<TextStyle>;
-  textVariant: TextVariant;
-  textColor: TextColor;
 }) => {
   const { styles } = useStyles(createStyles, { isSelected });
 
@@ -227,12 +231,9 @@ const TokenBalanceView = ({
   textStyle,
   textVariant,
   textColor,
-}: {
+}: BalanceTextProps & {
   balance?: string;
   isSelected: boolean;
-  textStyle?: StyleProp<TextStyle>;
-  textVariant: TextVariant;
-  textColor: TextColor;
 }) => {
   const { styles } = useStyles(createStyles, { isSelected });
 
@@ -266,6 +267,7 @@ export const TokenSelectorItem: React.FC<TokenSelectorItemProps> = ({
   children,
   isNoFeeAsset = false,
   secondaryRowContent,
+  tokenBalanceTextProps,
 }) => {
   const { styles } = useStyles(createStyles, { isSelected });
   const { variant } = useABTest(
@@ -319,6 +321,14 @@ export const TokenSelectorItem: React.FC<TokenSelectorItemProps> = ({
   const bottomRowBalanceTextStyle = {
     textVariant: TextVariant.BodySM,
     textColor: TextColor.Alternative,
+  };
+  const topRowTokenBalanceTextStyle = {
+    ...topRowBalanceTextStyle,
+    ...tokenBalanceTextProps,
+  };
+  const bottomRowTokenBalanceTextStyle = {
+    ...bottomRowBalanceTextStyle,
+    ...tokenBalanceTextProps,
   };
 
   const label = token.accountType
@@ -436,7 +446,7 @@ export const TokenSelectorItem: React.FC<TokenSelectorItemProps> = ({
                   balance={tokenBalance}
                   isSelected={isSelected}
                   textStyle={styles.rightValue}
-                  {...topRowBalanceTextStyle}
+                  {...topRowTokenBalanceTextStyle}
                 />
               ) : (
                 <FiatBalanceView
@@ -484,7 +494,7 @@ export const TokenSelectorItem: React.FC<TokenSelectorItemProps> = ({
                   balance={tokenBalance}
                   isSelected={isSelected}
                   textStyle={styles.rightValue}
-                  {...bottomRowBalanceTextStyle}
+                  {...bottomRowTokenBalanceTextStyle}
                 />
               )}
             </Box>
