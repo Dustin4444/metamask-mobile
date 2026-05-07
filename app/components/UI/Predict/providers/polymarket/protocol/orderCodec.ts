@@ -14,6 +14,7 @@ import {
 } from '../types';
 import { generateSalt, roundOrderAmount } from '../utils';
 import type { PolymarketProtocolDefinition } from './definitions';
+import { getMinAmountReceivedWithSlippage } from './slippage';
 
 export type ProtocolDefinition = PolymarketProtocolDefinition;
 
@@ -95,16 +96,7 @@ function getProtocolOrderTypes() {
 function getTakerAmountWithSlippage(preview: OrderPreview): string {
   const roundConfig = ROUNDING_CONFIG[preview.tickSize.toString() as TickSize];
   const decimals = roundConfig.amount ?? 4;
-
-  let minAmountWithSlippage =
-    preview.minAmountReceived * (1 - preview.slippage);
-
-  if (preview.side === Side.BUY) {
-    minAmountWithSlippage = Math.max(
-      minAmountWithSlippage,
-      preview.maxAmountSpent + preview.tickSize,
-    );
-  }
+  const minAmountWithSlippage = getMinAmountReceivedWithSlippage(preview);
 
   return parseUnits(
     roundOrderAmount({
