@@ -656,16 +656,12 @@ export class WC2Manager {
     // Get the current chain ID to include in permissions
     const walletChainIdHex = selectEvmChainId(store.getState());
     const walletChainIdDecimal = parseInt(walletChainIdHex, 16);
-    const referencedAdapterNamespaces = proposalReferencedAdapterNamespaces(
-      proposal.params,
-    );
-    const isMultichainOrigin = referencedAdapterNamespaces.length > 0;
-
     try {
       // Create a modified CAIP-25 caveat value that includes the current chain
       const caveatValue = {
         ...getDefaultCaip25CaveatValue(),
-        isMultichainOrigin,
+        isMultichainOrigin:
+          proposalReferencedAdapterNamespaces(proposal.params).length > 0,
       };
 
       // Important: Use hostname as the origin for permission request to ensure consistency
@@ -748,6 +744,7 @@ export class WC2Manager {
 
       const requiredNamespaces = proposal.params.requiredNamespaces ?? {};
       const optionalNamespaces = proposal.params.optionalNamespaces ?? {};
+      // In case of overlapping keys, required namespaces take precedence.
       const allProposalNamespaces = {
         ...optionalNamespaces,
         ...requiredNamespaces,
@@ -874,8 +871,7 @@ export class WC2Manager {
       const activeNamespaces = activeSession.namespaces ?? {};
       const chainChangedEmission = getChainChangedEmissionForWalletConnect({
         namespaces: activeNamespaces,
-        fallbackEvmDecimal: walletChainIdDecimal,
-        fallbackEvmHex: walletChainIdHex,
+        fallbackEvmChainId: walletChainIdDecimal,
       });
 
       const approvedChains = activeNamespaces?.eip155?.chains || [];
@@ -1006,6 +1002,8 @@ export class WC2Manager {
         const { sessionTopic } = rawParams;
         let session = this.sessions[sessionTopic];
         if (!session) {
+          // Deep links may target an active WalletKit session before this
+          // manager has recreated its local WalletConnect2Session wrapper.
           const activeSession = this.getSession(sessionTopic);
           if (activeSession) {
             session = new WalletConnect2Session({

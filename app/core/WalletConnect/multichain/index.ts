@@ -162,15 +162,17 @@ export const callMultichainRoutingService = async ({
   scope,
   requestId,
   mappedRequest,
+  origin,
 }: {
   connectedAddresses: CaipAccountId[];
   scope: CaipChainId;
   requestId: number;
   mappedRequest: SnapMappedRequest;
+  origin: string;
 }): Promise<unknown> =>
   Engine.controllerMessenger.call('MultichainRoutingService:handleRequest', {
     connectedAddresses,
-    origin: 'metamask',
+    origin,
     scope,
     request: {
       jsonrpc: '2.0' as const,

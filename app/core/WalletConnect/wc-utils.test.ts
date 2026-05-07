@@ -568,8 +568,7 @@ describe('WalletConnect Utils', () => {
 
       const result = getChainChangedEmissionForWalletConnect({
         namespaces,
-        fallbackEvmDecimal: 1,
-        fallbackEvmHex: '0x1',
+        fallbackEvmChainId: 1,
       });
 
       expect(result).toStrictEqual({
@@ -589,8 +588,7 @@ describe('WalletConnect Utils', () => {
 
       const result = getChainChangedEmissionForWalletConnect({
         namespaces,
-        fallbackEvmDecimal: 1,
-        fallbackEvmHex: '0x1',
+        fallbackEvmChainId: 1,
       });
 
       expect(result.chainId).toBe(
@@ -607,8 +605,7 @@ describe('WalletConnect Utils', () => {
 
       const result = getChainChangedEmissionForWalletConnect({
         namespaces,
-        fallbackEvmDecimal: 1,
-        fallbackEvmHex: '0x1',
+        fallbackEvmChainId: 1,
       });
 
       expect(result).toStrictEqual({ chainId: 'eip155:1', data: '0x1' });
@@ -622,8 +619,7 @@ describe('WalletConnect Utils', () => {
 
       const result = getChainChangedEmissionForWalletConnect({
         namespaces,
-        fallbackEvmDecimal: 137,
-        fallbackEvmHex: '0x89',
+        fallbackEvmChainId: 137,
       });
 
       expect(result).toStrictEqual({ chainId: 'eip155:137', data: '0x89' });
@@ -636,8 +632,7 @@ describe('WalletConnect Utils', () => {
 
       const result = getChainChangedEmissionForWalletConnect({
         namespaces,
-        fallbackEvmDecimal: 1,
-        fallbackEvmHex: '0x1',
+        fallbackEvmChainId: 1,
       });
 
       expect(result).toStrictEqual({ chainId: 'eip155:1', data: '0x1' });
@@ -646,8 +641,7 @@ describe('WalletConnect Utils', () => {
     it('falls back to constructed eip155 chain id when no namespaces have chains', () => {
       const result = getChainChangedEmissionForWalletConnect({
         namespaces: {},
-        fallbackEvmDecimal: 137,
-        fallbackEvmHex: '0x89',
+        fallbackEvmChainId: 137,
       });
 
       expect(result).toStrictEqual({ chainId: 'eip155:137', data: '0x89' });
@@ -656,8 +650,7 @@ describe('WalletConnect Utils', () => {
     it('returns the fallback when namespaces is undefined', () => {
       const result = getChainChangedEmissionForWalletConnect({
         namespaces: undefined,
-        fallbackEvmDecimal: 1,
-        fallbackEvmHex: '0x1',
+        fallbackEvmChainId: 1,
       });
 
       expect(result).toStrictEqual({ chainId: 'eip155:1', data: '0x1' });

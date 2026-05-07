@@ -535,12 +535,13 @@ export const buildTronNamespace = ({
         .filter(Boolean),
     ),
   );
-  const fallbackAddresses =
-    existingAddresses.length > 0 ? [] : listTronEoaAddresses();
-  const tronAddresses = Array.from(
-    new Set([...existingAddresses, ...fallbackAddresses]),
-  );
-
+  // const fallbackAddresses =
+  //   existingAddresses.length > 0 ? [] : listTronEoaAddresses();
+  // const tronAddresses = Array.from(
+  //   new Set([...existingAddresses, ...fallbackAddresses]),
+  // );
+  const tronAddresses =
+    existingAddresses.length > 0 ? existingAddresses : listTronEoaAddresses();
   const slice: TronNamespaceSlice = {
     chains: tronChains,
     methods:

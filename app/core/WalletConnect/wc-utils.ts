@@ -233,26 +233,6 @@ export const waitForNetworkModalOnboarding = async ({
   }
 };
 
-/**
- * Normalizes a CAIP-2 chain ID coming FROM WalletConnect to MetaMask's internal format.
- * Dispatches per namespace — add a new chain block below to handle future format mismatches.
- *
- * All conversions are currently no-ops (commented out per chain) until dApps adopt
- * the canonical formats from ChainAgnostic/namespaces.
- */
-export const normalizeCaipChainIdInbound = (caipChainId: string): string =>
-  normalizeCaipChainIdInboundForWalletConnect(caipChainId);
-
-/**
- * Normalizes a CAIP-2 chain ID going TO WalletConnect from MetaMask's internal format.
- * Dispatches per namespace — add a new chain block below to handle future format mismatches.
- *
- * All conversions are currently no-ops (commented out per chain) until dApps adopt
- * the canonical formats from ChainAgnostic/namespaces.
- */
-export const normalizeCaipChainIdOutbound = (caipChainId: string): string =>
-  normalizeCaipChainIdOutboundForWalletConnect(caipChainId);
-
 export function normalizeCaipChainIdInboundForWalletConnect(
   caipChainId: string,
 ): string {
@@ -479,13 +459,12 @@ export interface ChainChangedEmitDecision {
  */
 export const getChainChangedEmissionForWalletConnect = ({
   namespaces,
-  fallbackEvmDecimal,
-  fallbackEvmHex,
+  fallbackEvmChainId,
 }: {
   namespaces?: ChainChangedNamespacesLike;
-  fallbackEvmDecimal: number;
-  fallbackEvmHex: string;
+  fallbackEvmChainId: number;
 }): ChainChangedEmission => {
+  const fallbackEvmHex = `0x${fallbackEvmChainId.toString(16)}`;
   const eip155Events = namespaces?.eip155?.events ?? [];
   const eip155Chain = namespaces?.eip155?.chains?.[0];
   if (eip155Chain && eip155Events.includes('chainChanged')) {
@@ -514,7 +493,7 @@ export const getChainChangedEmissionForWalletConnect = ({
   }
 
   return {
-    chainId: `eip155:${fallbackEvmDecimal}`,
+    chainId: `eip155:${fallbackEvmChainId}`,
     data: fallbackEvmHex,
   };
 };

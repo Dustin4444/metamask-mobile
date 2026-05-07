@@ -45,21 +45,20 @@ import {
   getChainIdForCaipChainId,
   getHostname,
   normalizeDappUrl,
-  normalizeCaipChainIdInbound,
+  // normalizeCaipChainIdInbound,
   getChainChangedEmissionForWalletConnect,
   shouldEmitChainChangedForWalletConnect,
 } from './wc-utils';
 import {
   buildAdapterNamespaces,
   callMultichainRoutingService,
-  getCompatibleCaipChainIdsForWalletConnect,
   mapRequestForSnap,
+  normalizeCaipChainIdInboundForWalletConnect,
   normalizeSnapResponse,
   proposalReferencedAdapterNamespaces,
 } from './multichain';
 import { selectPerOriginChainId } from '../../selectors/selectedNetworkController';
 import { errorCodes, providerErrors, rpcErrors } from '@metamask/rpc-errors';
-import { PermissionDoesNotExistError } from '@metamask/permission-controller';
 import { switchToNetwork } from '../RPCMethods/lib/ethereum-chain-utils';
 import { updateWC2Metadata } from '../../actions/sdk';
 import AppConstants from '../AppConstants';
@@ -325,15 +324,15 @@ class WalletConnect2Session {
   isHandlingRequest = () => this._isHandlingRequest;
 
   emitEvent = async (eventName: string, data: unknown) => {
-    const numericChainId =
-      typeof data === 'number' ? data : Number.parseInt(String(data), 10);
-    const fallbackEvmHex = Number.isFinite(numericChainId)
-      ? `0x${numericChainId.toString(16)}`
-      : String(data);
+    const chainId = Number(data);
+    if (!Number.isFinite(chainId)) {
+      return;
+    }
+    const fallbackEvmHex = `0x${chainId.toString(16)}`;
     let chainIdForEvent = `eip155:${data}`;
     let eventDataForEvent = data;
     if (eventName === 'chainChanged') {
-      const eip155ChainId = `eip155:${numericChainId}`;
+      const eip155ChainId = `eip155:${chainId}`;
       const emitDecision = shouldEmitChainChangedForWalletConnect({
         chainId: eip155ChainId,
         namespaces: this.session.namespaces,
@@ -445,28 +444,32 @@ class WalletConnect2Session {
       );
 
       if (accounts.length === 0) {
-        const effectiveApprovedAccounts = getPermittedAccounts(this.channelId);
-        if (effectiveApprovedAccounts.length > 0) {
+        const approvedAccounts = getPermittedAccounts(this.channelId);
+        if (approvedAccounts.length > 0) {
           DevLogger.log(
             `WC2::updateSession found approved accounts`,
-            effectiveApprovedAccounts,
+            approvedAccounts,
           );
-          accounts = effectiveApprovedAccounts;
+          accounts = approvedAccounts;
         } else {
-          const referencedAdapterNamespaces =
-            proposalReferencedAdapterNamespaces({
-              requiredNamespaces: this.session.requiredNamespaces,
-              optionalNamespaces: this.session.optionalNamespaces,
-            });
-          DevLogger.log(
-            `WC2::updateSession no permitted accounts found for sessionTopic=${sessionTopic} and channelId=${this.channelId} selfReportedUrl=${this.selfReportedUrl}`,
+          console.warn(
+            `WC2::updateSession no permitted accounts found for topic=${this.session.topic} selfReportedUrl=${this.selfReportedUrl}`,
           );
-          // Keep legacy behavior for EVM-only sessions: do not update a session
-          // with empty account lists. Non-EVM adapter sessions may still build
-          // valid namespaces from adapter-managed permissions/accounts.
-          if (referencedAdapterNamespaces.length === 0) {
-            return;
-          }
+          return;
+          // const referencedAdapterNamespaces =
+          //   proposalReferencedAdapterNamespaces({
+          //     requiredNamespaces: this.session.requiredNamespaces,
+          //     optionalNamespaces: this.session.optionalNamespaces,
+          //   });
+          // DevLogger.log(
+          //   `WC2::updateSession no permitted accounts found for sessionTopic=${sessionTopic} and channelId=${this.channelId} selfReportedUrl=${this.selfReportedUrl}`,
+          // );
+          // // Keep legacy behavior for EVM-only sessions: do not update a session
+          // // with empty account lists. Non-EVM adapter sessions may still build
+          // // valid namespaces from adapter-managed permissions/accounts.
+          // if (referencedAdapterNamespaces.length === 0) {
+          //   return;
+          // }
         }
       }
 
@@ -480,22 +483,19 @@ class WalletConnect2Session {
         );
       }
 
-      const currentNamespaces = this.normalizeSessionNamespaces(
-        this.session.namespaces,
-      );
-      const namespaces = this.normalizeSessionNamespaces(
+      const proposedPermissionNamespaces = this.normalizeSessionNamespaces(
         await getScopedPermissions({ channelId: this.channelId }),
       );
       DevLogger.log(
         `🔴🔴 WC2::updateSession updating with namespaces`,
-        namespaces,
+        proposedPermissionNamespaces,
       );
 
       // Preserve already-approved namespaces (e.g. tron) if the freshly
       // computed permissions payload is temporarily partial (e.g. only eip155).
       const mergedNamespaces = {
-        ...currentNamespaces,
-        ...namespaces,
+        ...this.session.namespaces,
+        ...proposedPermissionNamespaces,
       };
 
       // Keep non-EVM namespaces aligned with what the dapp requested at
@@ -516,17 +516,19 @@ class WalletConnect2Session {
       // adapter slice was produced (e.g. wallet has no Tron account), do
       // not emit a chainChanged with an EVM fallback. Non-EVM dapps don't
       // recognise EVM hex chain ids and WalletKit may reject the emit.
-      const requiredAdapterNamespaces = proposalReferencedAdapterNamespaces({
-        requiredNamespaces: this.session.requiredNamespaces,
-        optionalNamespaces: {},
-      });
-      const missingRequiredAdapterNamespaces = requiredAdapterNamespaces.filter(
-        (ns) => !mergedNamespaces[ns]?.chains?.length,
-      );
-      if (missingRequiredAdapterNamespaces.length > 0) {
+      const requiredNonEvmNamespacesInProposal =
+        proposalReferencedAdapterNamespaces({
+          requiredNamespaces: this.session.requiredNamespaces,
+          optionalNamespaces: {},
+        });
+      const missingRequiredNonEvmSessionChains =
+        requiredNonEvmNamespacesInProposal.filter(
+          (ns) => !mergedNamespaces[ns]?.chains?.length,
+        );
+      if (missingRequiredNonEvmSessionChains.length > 0) {
         DevLogger.log(
           `WC2::updateSession missing required non-EVM adapter namespaces`,
-          missingRequiredAdapterNamespaces,
+          missingRequiredNonEvmSessionChains,
         );
         return;
       }
@@ -541,7 +543,7 @@ class WalletConnect2Session {
       ]);
       // Preserve whatever was in the currently-approved session as well
       // (a session previously approved eip155 should keep eip155 on update).
-      Object.keys(currentNamespaces).forEach((key) =>
+      Object.keys(this.session.namespaces).forEach((key) =>
         allowedNamespaceKeys.add(key),
       );
       if (allowedNamespaceKeys.size > 0) {
@@ -570,8 +572,7 @@ class WalletConnect2Session {
 
       const chainChangedEmission = getChainChangedEmissionForWalletConnect({
         namespaces: this.session.namespaces,
-        fallbackEvmDecimal: chainId,
-        fallbackEvmHex: `0x${chainId.toString(16)}`,
+        fallbackEvmChainId: chainId,
       });
 
       const emitDecision = shouldEmitChainChangedForWalletConnect({
@@ -757,7 +758,7 @@ class WalletConnect2Session {
         },
       });
     }
-    const requestChainId = normalizeCaipChainIdInbound(
+    const requestChainId = normalizeCaipChainIdInboundForWalletConnect(
       rawRequestChainId,
     ) as CaipChainId;
     let requestNamespace: string | undefined;
@@ -776,51 +777,21 @@ class WalletConnect2Session {
     }
 
     // Mark redirect before any routing so all namespaces benefit from it.
-    const redirectNamespace =
-      requestNamespace === KnownCaipNamespace.Wallet
-        ? KnownCaipNamespace.Eip155
-        : requestNamespace;
     const redirectMethods =
-      (redirectNamespace && REDIRECT_METHODS_BY_NAMESPACE[redirectNamespace]) ??
+      (requestNamespace && REDIRECT_METHODS_BY_NAMESPACE[requestNamespace]) ??
       [];
     if (redirectMethods.includes(method)) {
       this.requestsToRedirect[requestEvent.id] = true;
     }
 
-    const getPermittedChainsSafe = async (
-      subject: string,
-    ): Promise<CaipChainId[]> => {
-      try {
-        return await getPermittedChains(subject);
-      } catch (error) {
-        if (error instanceof PermissionDoesNotExistError) {
-          return [];
-        }
-        throw error;
-      }
-    };
-
-    const permittedChainsFromChannel = await getPermittedChainsSafe(
-      this.channelId,
-    );
-    const permittedChainsFromSession =
-      this.session.topic !== this.channelId
-        ? await getPermittedChainsSafe(this.session.topic)
-        : [];
-    const permittedChains = Array.from(
-      new Set([...permittedChainsFromChannel, ...permittedChainsFromSession]),
-    );
-    const compatibleRequestChainIds =
-      getCompatibleCaipChainIdsForWalletConnect(requestChainId);
-    const isPermittedByPermissionController = compatibleRequestChainIds.some(
-      (chainId) => permittedChains.includes(chainId as CaipChainId),
-    );
-    const activeSessionChains = Object.values(this.session.namespaces ?? {})
-      .flatMap((namespaceSlice) => namespaceSlice?.chains ?? [])
-      .filter(Boolean);
-    const isPermittedByActiveSession = compatibleRequestChainIds.some(
-      (chainId) => activeSessionChains.includes(chainId),
-    );
+    const permittedChainsFromChannel = await getPermittedChains(this.channelId);
+    const isPermittedByPermissionController =
+      permittedChainsFromChannel.includes(requestChainId);
+    const activeSessionChains = Object.values(
+      this.session.namespaces ?? {},
+    ).flatMap((namespaceSlice) => namespaceSlice?.chains ?? []);
+    const isPermittedByActiveSession =
+      activeSessionChains.includes(requestChainId);
     const isPermittedRequestChain =
       isPermittedByPermissionController || isPermittedByActiveSession;
 
@@ -890,7 +861,7 @@ class WalletConnect2Session {
       `WalletConnect2Session::handleRequest caip2ChainId=${caip2ChainId} method=${method} unverifiedOrigin=${unverifiedOrigin}`,
     );
 
-    const isAllowedChainId = permittedChains.includes(caip2ChainId);
+    const isAllowedChainId = permittedChainsFromChannel.includes(caip2ChainId);
 
     if (method === 'wallet_switchEthereumChain') {
       try {
@@ -993,6 +964,7 @@ class WalletConnect2Session {
         scope,
         requestId: requestEvent.id,
         mappedRequest,
+        origin: this.channelId,
       });
       const walletConnectResult = normalizeSnapResponse({
         scope,
