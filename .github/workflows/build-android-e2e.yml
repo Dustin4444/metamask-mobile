@@ -61,6 +61,8 @@ jobs:
             .yarn/cache
             ${{ env.GRADLE_USER_HOME }}/caches
             ${{ env.GRADLE_USER_HOME }}/wrapper
+            ${{ inputs.build_type == 'flask' && 'android/app/build/outputs/apk/flask/release' || 'android/app/build/outputs/apk/prod/release' }}
+            ${{ inputs.build_type == 'flask' && 'android/app/build/outputs/apk/androidTest/flask/release' || 'android/app/build/outputs/apk/androidTest/prod/release' }}
 
       - name: Restore .metamask folder (Foundry download cache for install:foundryup)
         if: ${{ inputs.runner_provider != 'namespace' }}
@@ -115,6 +117,30 @@ jobs:
           else
             echo "❌ Error: build_type ${{ inputs.build_type }} is not valid"
             exit 1
+          fi
+
+      # Namespace volumes are not keyed like cirruslabs/cache; marker must match Cirrus branch APK key inputs: ref_name, build_type, CACHE_GENERATION, fingerprint, Gradle hash.
+      - name: Check Namespace E2E APK cache
+        id: namespace-apk-cache
+        if: ${{ inputs.runner_provider == 'namespace' }}
+        shell: bash
+        env:
+          MARKER_PATH: ${{ steps.determine-target-paths.outputs.apk-target-path }}/.e2e-apk-cache-marker
+          APK_PATH: ${{ steps.determine-target-paths.outputs.apk-target-path }}/${{ steps.determine-target-paths.outputs.artifact_name }}.apk
+          TEST_APK_PATH: ${{ steps.determine-target-paths.outputs.test-apk-target-path }}/${{ steps.determine-target-paths.outputs.artifact_name }}-androidTest.apk
+          FINGERPRINT: ${{ steps.generate-fingerprint.outputs.fingerprint }}
+          CACHE_GENERATION: ${{ env.CACHE_GENERATION }}
+          GRADLE_FILES_HASH: ${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          REF_NAME: ${{ github.ref_name }}
+          BUILD_TYPE: ${{ inputs.build_type }}
+        run: |
+          EXPECTED="${REF_NAME}"$'\n'"${BUILD_TYPE}"$'\n'"${CACHE_GENERATION}"$'\n'"${FINGERPRINT}"$'\n'"${GRADLE_FILES_HASH}"
+          if [[ -f "${MARKER_PATH}" ]] && [[ -f "${APK_PATH}" ]] && [[ -f "${TEST_APK_PATH}" ]] && [[ "$(<"${MARKER_PATH}")" == "${EXPECTED}" ]]; then
+            echo "cache-hit=true" >> "${GITHUB_OUTPUT}"
+            echo "Namespace E2E APK cache hit (marker matches Cirrus-equivalent inputs)."
+          else
+            echo "cache-hit=false" >> "${GITHUB_OUTPUT}"
+            echo "Namespace E2E APK cache miss — full build."
           fi
 
       - name: Restore APKs matching fingerprint from branch cache
@@ -189,7 +215,8 @@ jobs:
           key: gradle-main-${{ env.GRADLE_CACHE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
       - name: Build Android E2E APKs
-        if: ${{ inputs.runner_provider == 'namespace' || (steps.apk-cache-restore.outputs.cache-hit != 'true' && steps.apk-cache-restore-main.outputs.cache-hit != 'true') }}
+        id: build-android-e2e-apks
+        if: ${{ (inputs.runner_provider == 'namespace' && steps.namespace-apk-cache.outputs.cache-hit != 'true') || (inputs.runner_provider != 'namespace' && steps.apk-cache-restore.outputs.cache-hit != 'true' && steps.apk-cache-restore-main.outputs.cache-hit != 'true') }}
         run: |
           echo "🏗 Building Android E2E APKs..."
           export NODE_OPTIONS="--max-old-space-size=4096"
@@ -231,8 +258,22 @@ jobs:
           MM_INFURA_PROJECT_ID: ${{ secrets.MM_INFURA_PROJECT_ID }}
           MM_PREDICT_GTM_MODAL_ENABLED: 'false'
 
+      - name: Record Namespace E2E APK cache marker
+        if: ${{ inputs.runner_provider == 'namespace' && steps.build-android-e2e-apks.outcome == 'success' }}
+        shell: bash
+        env:
+          MARKER_PATH: ${{ steps.determine-target-paths.outputs.apk-target-path }}/.e2e-apk-cache-marker
+          FINGERPRINT: ${{ steps.generate-fingerprint.outputs.fingerprint }}
+          CACHE_GENERATION: ${{ env.CACHE_GENERATION }}
+          GRADLE_FILES_HASH: ${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          REF_NAME: ${{ github.ref_name }}
+          BUILD_TYPE: ${{ inputs.build_type }}
+        run: |
+          EXPECTED="${REF_NAME}"$'\n'"${BUILD_TYPE}"$'\n'"${CACHE_GENERATION}"$'\n'"${FINGERPRINT}"$'\n'"${GRADLE_FILES_HASH}"
+          printf '%s\n' "${EXPECTED}" > "${MARKER_PATH}"
+
       - name: Repack APK with JS updates using @expo/repack-app
-        if: ${{ inputs.runner_provider != 'namespace' && (steps.apk-cache-restore.outputs.cache-hit == 'true' || steps.apk-cache-restore-main.outputs.cache-hit == 'true') }}
+        if: ${{ (inputs.runner_provider != 'namespace' && (steps.apk-cache-restore.outputs.cache-hit == 'true' || steps.apk-cache-restore-main.outputs.cache-hit == 'true')) || (inputs.runner_provider == 'namespace' && steps.namespace-apk-cache.outputs.cache-hit == 'true') }}
         run: |
           echo "📦 Repacking APK with updated JavaScript bundle using @expo/repack-app..."
           # Use the optimized repack script which uses @expo/repack-app
