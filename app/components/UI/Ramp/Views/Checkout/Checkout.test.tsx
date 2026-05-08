@@ -686,7 +686,7 @@ describe('Checkout', () => {
       expect((props as { order_id?: string }).order_id).toBeUndefined();
     });
 
-    it('fires RAMPS_CHECKOUT_URL_CHANGE with step_index + previous_url_path and dedups repeats', async () => {
+    it('fires RAMPS_CHECKOUT_URL_CHANGED with step_index + previous_url_path and dedups repeats', async () => {
       mockUseParams.mockReturnValue({
         url: 'https://provider.example.com/checkout',
         providerName: 'Test',
@@ -701,7 +701,7 @@ describe('Checkout', () => {
       });
 
       const urlChanges = findAllEventProps(
-        MetaMetricsEvents.RAMPS_CHECKOUT_URL_CHANGE,
+        MetaMetricsEvents.RAMPS_CHECKOUT_URL_CHANGED,
       );
       expect(urlChanges).toHaveLength(1);
       expect(urlChanges[0]).toMatchObject({
@@ -745,7 +745,7 @@ describe('Checkout', () => {
       ).toBeGreaterThanOrEqual(0);
     });
 
-    it('fires RAMPS_CHECKOUT_LOAD_COMPLETE with load_success=true on successful load', async () => {
+    it('fires RAMPS_CHECKOUT_LOAD_COMPLETED with load_success=true on successful load', async () => {
       mockUseParams.mockReturnValue({
         url: 'https://provider.example.com/checkout',
         providerName: 'Test',
@@ -759,7 +759,7 @@ describe('Checkout', () => {
       });
 
       const props = findEventProps(
-        MetaMetricsEvents.RAMPS_CHECKOUT_LOAD_COMPLETE,
+        MetaMetricsEvents.RAMPS_CHECKOUT_LOAD_COMPLETED,
       );
       expect(props).toMatchObject({
         url_path: 'https://provider.example.com/checkout',
@@ -770,7 +770,7 @@ describe('Checkout', () => {
       ).toBeGreaterThanOrEqual(0);
     });
 
-    it('fires RAMPS_CHECKOUT_HTTP_ERROR and subsequent LOAD_COMPLETE has load_success=false', async () => {
+    it('fires RAMPS_CHECKOUT_HTTP_ERROR_RECEIVED and subsequent LOAD_COMPLETE has load_success=false', async () => {
       mockUseParams.mockReturnValue({
         url: 'https://provider.example.com/checkout',
         providerName: 'Test',
@@ -785,7 +785,7 @@ describe('Checkout', () => {
       });
 
       const httpError = findEventProps(
-        MetaMetricsEvents.RAMPS_CHECKOUT_HTTP_ERROR,
+        MetaMetricsEvents.RAMPS_CHECKOUT_HTTP_ERROR_RECEIVED,
       );
       expect(httpError).toMatchObject({
         url_path: 'https://provider.example.com/checkout',
@@ -794,7 +794,7 @@ describe('Checkout', () => {
       });
 
       const loadComplete = findEventProps(
-        MetaMetricsEvents.RAMPS_CHECKOUT_LOAD_COMPLETE,
+        MetaMetricsEvents.RAMPS_CHECKOUT_LOAD_COMPLETED,
       );
       expect(loadComplete).toMatchObject({ load_success: false });
     });
@@ -882,7 +882,7 @@ describe('Checkout', () => {
       });
 
       const loadCompletes = findAllEventProps(
-        MetaMetricsEvents.RAMPS_CHECKOUT_LOAD_COMPLETE,
+        MetaMetricsEvents.RAMPS_CHECKOUT_LOAD_COMPLETED,
       );
       expect(loadCompletes).toHaveLength(0);
     });
@@ -903,7 +903,7 @@ describe('Checkout', () => {
       });
 
       const loadCompletes = findAllEventProps(
-        MetaMetricsEvents.RAMPS_CHECKOUT_LOAD_COMPLETE,
+        MetaMetricsEvents.RAMPS_CHECKOUT_LOAD_COMPLETED,
       );
       expect(loadCompletes).toHaveLength(1);
     });
@@ -928,7 +928,7 @@ describe('Checkout', () => {
       });
 
       const urlChanges = findAllEventProps(
-        MetaMetricsEvents.RAMPS_CHECKOUT_URL_CHANGE,
+        MetaMetricsEvents.RAMPS_CHECKOUT_URL_CHANGED,
       );
       expect(urlChanges).toHaveLength(1);
       expect(urlChanges[0]).toMatchObject({
