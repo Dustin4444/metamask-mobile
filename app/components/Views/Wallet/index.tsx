@@ -1384,7 +1384,11 @@ const Wallet = ({
         receiveButtonActionID={WalletViewSelectorsIDs.WALLET_RECEIVE_BUTTON}
       />
       {isCarouselBannersEnabled && <Carousel style={styles.carousel} />}
-      {isMoneyHomeScreenEnabled && <MoneyBalanceCard />}
+      {isMoneyHomeScreenEnabled && (
+        <View style={styles.base}>
+          <MoneyBalanceCard />
+        </View>
+      )}
     </>
   );
 
@@ -1406,7 +1410,11 @@ const Wallet = ({
         receiveButtonActionID={WalletViewSelectorsIDs.WALLET_RECEIVE_BUTTON}
       />
       {isCarouselBannersEnabled && <Carousel style={styles.carousel} />}
-      {isMoneyHomeScreenEnabled && <MoneyBalanceCard />}
+      {isMoneyHomeScreenEnabled && (
+        <View style={styles.base}>
+          <MoneyBalanceCard />
+        </View>
+      )}
     </>
   );
 
