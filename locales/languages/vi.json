@@ -709,7 +709,11 @@
     "smart_contract_address": "Địa chỉ hợp đồng thông minh",
     "smart_contract_address_warning": "Địa chỉ người nhận có thể không hỗ trợ chuyển khoản token trực tiếp, điều này có thể dẫn đến mất tiền. Chỉ tiếp tục nếu bạn chắc chắn hợp đồng này có thể nhận khoản chuyển của bạn.",
     "i_understand": "Tôi hiểu",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "new_address_title": "New address",
+    "new_address_message": "You're sending to this address for the first time. Make sure that it's correct before you continue:",
+    "alert_navigation_previous": "Previous alert",
+    "alert_navigation_next": "Next alert"
   },
   "unified_ramp": {
     "networks_filter_bar": {
@@ -2675,6 +2679,22 @@
     "token_is_needed_to_continue": "Cần {{tokenSymbol}} để tiếp tục",
     "fund_your_wallet": "Nạp tiền vào ví của bạn",
     "get_ready_for_web3": "Chuẩn bị ví của bạn để sử dụng web3",
+    "home_onboarding_steps": {
+      "header": "Steps",
+      "get_started_title": "Get started on MetaMask",
+      "fund_title": "Fund your wallet",
+      "fund_subtitle": "No one likes an empty wallet. Easily add funds to start trading.",
+      "fund_primary": "Add funds",
+      "trade_title": "Make your first trade",
+      "trade_subtitle": "Trade trending tokens across multiple networks  to grow your portfolio.",
+      "trade_primary": "Trade",
+      "notifications_title": "Turn on notifications",
+      "notifications_subtitle": "Stay up to date on shifts in the market to make the best moves for your portfolio.",
+      "notifications_primary": "Turn on",
+      "skip": "Skip",
+      "progress_a11y": "Step {{current}} of {{total}}",
+      "balance_loading_a11y": "Loading wallet balance"
+    },
     "add_funds": "Nạp tiền",
     "next": "Tiếp theo",
     "buy_asset": "Mua {{asset}}",
@@ -6472,10 +6492,17 @@
       },
       "education": {
         "heading": "NHẬN {{percentage}}%\nĐỒNG ỔN ĐỊNH",
-        "description": "Chuyển đổi đồng ổn định của bạn sang mUSD và nhận thưởng quy đổi theo năm lên đến {{percentage}}% mà bạn có thể nhận hằng ngày.",
+        "description": "Convert your stablecoins to mUSD and earn a {{percentage}}% annualized bonus.",
         "terms_apply": "Áp dụng điều khoản.",
         "primary_button": "Bắt đầu",
-        "secondary_button": "Không phải bây giờ"
+        "secondary_button": "Không phải bây giờ",
+        "checklist": {
+          "dollar_backed": "Dollar-backed",
+          "no_lockups": "No lockups",
+          "daily_bonus": "Daily bonus",
+          "metamask_stablecoins": "MetaMask stablecoins",
+          "no_metamask_fee": "No MetaMask fee"
+        }
       },
       "buy_musd": "Mua mUSD",
       "get_musd": "Nhận mUSD",
@@ -6519,6 +6546,7 @@
   },
   "money": {
     "title": "Tài chính",
+    "your_balance": "Your balance",
     "apy_label": "APY {{percentage}}%",
     "apy_info_label": "Thông tin APY",
     "onboarding": {
@@ -6539,9 +6567,9 @@
       "card": "Thẻ"
     },
     "earnings": {
-      "title": "Thu nhập",
-      "lifetime": "Thu nhập trọn đời",
-      "projected": "Thu nhập dự kiến",
+      "title": "Estimated earnings",
+      "estimated_monthly": "Monthly",
+      "estimated_yearly": "Annual",
       "info_label": "Earnings info"
     },
     "how_it_works": {
@@ -6551,6 +6579,12 @@
     },
     "musd_row": {
       "add": "Thêm"
+    },
+    "balance_card": {
+      "label": "Money balance",
+      "add": "Add",
+      "info_sheet_title": "Money Home",
+      "info_sheet_body": "Your dollar-backed balance, always available. Spend it, send it, or trade it anytime. We don't calculate this into your total account balance."
     },
     "potential_earnings": {
       "title": "Kiếm lợi nhuận từ tiền mã hóa của bạn",
@@ -6565,11 +6599,11 @@
       "subtitle": "Chi tiêu tiền của bạn ở mọi nơi.",
       "virtual_card": "Thẻ ảo",
       "metal_card": "Thẻ kim loại",
-      "cashback": "Hoàn tiền {{percentage}}%",
+      "cashback": "{{percentage}}% mUSD back",
       "get_now": "Nhận ngay",
       "link_title": "Liên kết Thẻ MetaMask",
       "link_subtitle": "Chi tiêu số dư Tài chính của bạn và sinh lời.",
-      "link_bullet_cashback": "Hoàn tiền lên đến 3%",
+      "link_bullet_cashback": "Up to 3% mUSD back",
       "link_bullet_apy": "Lên đến {{apy}}% APY",
       "link_card": "Liên kết thẻ"
     },
@@ -6579,7 +6613,7 @@
       "benefit_dollar_backed": "Giữ tiền của bạn an toàn dưới dạng mUSD, một đồng ổn định được bảo chứng 1:1 theo USD",
       "benefit_liquidity": "Có khả năng thanh khoản cao, không bị khóa vốn, cho phép giao dịch hoặc rút tiền bất cứ lúc nào",
       "benefit_spend_prefix": "Chi tiêu tại hơn 150 triệu điểm chấp nhận với Thẻ MetaMask và được ",
-      "benefit_spend_cashback": "hoàn tiền 1-3%",
+      "benefit_spend_cashback": "1-3% mUSD back",
       "benefit_transfer": "Chuyển tiền đến bất kỳ ví nào của bạn trên MetaMask",
       "benefit_global": "Gửi và nhận tiền toàn cầu",
       "learn_more": "Tìm hiểu thêm"
@@ -6618,12 +6652,8 @@
       "learn_more": "Tìm hiểu thêm"
     },
     "earnings_tooltip": {
-      "title": "Thu nhập",
-      "lifetime_heading": "Thu nhập trọn đời",
-      "lifetime_body": "The total yield you've earned since opening your Money account.",
-      "projected_heading": "Thu nhập dự kiến",
-      "projected_body": "Dự đoán số tiền bạn sẽ nhận được trong một năm dựa trên số dư và lãi suất hiện tại.",
-      "disclaimer": "Projection assumes {{percentage}}% Annual Percentage Yield (APY) remains unchanged for 1 year. APY is variable and may change due to various factors. No guarantee of return."
+      "title": "Estimated earnings",
+      "body": "An estimate of how much you could earn over a period based on your current balance and today's APY. Estimates are not guaranteed returns and remain subject to change."
     },
     "activity": {
       "title": "Hoạt động",
@@ -6680,7 +6710,7 @@
       "faq_q7": "Tỷ lệ APY có thay đổi không?",
       "faq_q8": "Đây là tài khoản tiết kiệm hay tài khoản chi tiêu?",
       "faq_q9": "Ai kiểm soát tiền của tôi?",
-      "faq_q10": "Tôi được hoàn tiền bao nhiêu khi sử dụng Thẻ MetaMask?",
+      "faq_q10": "What mUSD back do I get with the MetaMask Card?",
       "sounds_good": "Có vẻ tốt"
     }
   },
@@ -7260,6 +7290,9 @@
     "price_impact_warning_title": "Tác động giá cao",
     "price_impact_error_title": "Tác động giá rất cao",
     "price_impact_error_description": "Bạn sẽ mất khoảng {{priceImpact}} giá thị trường của token trong giao dịch hoán đổi này. Hãy thử giao dịch với số lượng nhỏ hơn hoặc một lộ trình có thanh khoản cao hơn để cải thiện tỷ giá.",
+    "insufficient_native_reserve_cta": "Use max allowed",
+    "insufficient_native_reserve_message": "This network requires at least {{minimumReserve}} {{ticker}} to remain in your account. You can use a maximum of {{maxSwappable}} {{ticker}}",
+    "insufficient_native_reserve_title": "Minimum {{ticker}} reserve balance required",
     "token_warning_suspicious_banner": "{{token}} là một token đáng ngờ.",
     "token_warning_malicious_banner": "{{token}} là một token độc hại. Hãy cẩn trọng khi tương tác với token này.",
     "token_warning_modal_suspicious_title": "Token đáng ngờ",
@@ -7616,17 +7649,17 @@
         "price": "Miễn phí",
         "feature_1": "Thẻ ảo dùng cho Apple Pay và Google Pay",
         "feature_2": "Thanh toán bằng tiền mã hoá (USDC, USDT, WETH, v.v.)",
-        "feature_3": "Hoàn tiền 1% USDC cho mỗi giao dịch mua hàng"
+        "feature_3": "1% mUSD back on every purchase"
       },
       "metal_card": {
         "name": "Thẻ Metal",
         "price": "$199/năm",
         "everything_in_virtual": "Mọi thứ có trong thẻ ảo, cộng thêm:",
         "feature_1": "Thẻ kim loại khắc tên cao cấp",
-        "feature_2": "Hoàn tiền 3% cho $10.000 đầu tiên mỗi năm",
+        "feature_2": "3% mUSD back on first $10,000/year",
         "feature_3": "Không tính phí giao dịch quốc tế"
       },
-      "earn_up_to_badge": "Nhận tối đa $300 hoàn tiền mỗi năm",
+      "earn_up_to_badge": "Earn up to $300 in mUSD back annually",
       "upgrade_to_metal_label": "Hoặc nâng cấp lên Metal để nhận phần thưởng gấp 3 lần"
     },
     "review_order": {
@@ -7647,7 +7680,7 @@
     "order_completed": {
       "title": "THẺ CỦA BẠN\nĐÃ ĐƯỢC ĐẶT",
       "subtitle": "Thẻ sẽ được gửi đến trong vòng 4 đến 6 tuần.",
-      "description": "Thiết lập thẻ ảo và thêm vào ví kỹ thuật số để bắt đầu nhận hoàn tiền.",
+      "description": "Set up your virtual card and add it to your digital wallet to start earning mUSD back.",
       "set_up_card_button": "Thiết lập thẻ",
       "back_to_card_button": "Quay lại Thẻ"
     },
@@ -7666,7 +7699,7 @@
     },
     "card_onboarding": {
       "title": "Chi tiêu\nvà Nhận thưởng",
-      "description": "Thẻ MetaMask là cách nhanh chóng và\ndễ dàng để chi tiêu tiền mã hóa và\nnhận hoàn tiền tới 3%.",
+      "description": "The MetaMask Card is the fast and\neasy way to spend your crypto and\nearn up to 3% mUSD back.",
       "apply_now_button": "Thiết lập ngay",
       "login_button": "Đăng nhập",
       "not_now_button": "Không phải bây giờ",
@@ -7948,9 +7981,9 @@
         "card_tos_title": "Điều khoản và điều kiện",
         "order_metal_card": "Thẻ Metal",
         "order_metal_card_description": "Đặt hàng Thẻ Metal vật lý ngay",
-        "cashback": "Hoàn tiền",
-        "cashback_description": "Nhận lại 1% cho mọi chi tiêu",
-        "cashback_description_metal": "Nhận lại 3% cho mọi chi tiêu",
+        "cashback": "mUSD Back",
+        "cashback_description": "Earn 1% mUSD back on all spending",
+        "cashback_description_metal": "Earn 3% mUSD back on all spending",
         "freeze_card": "Khóa thẻ",
         "unfreeze_card": "Mở khóa thẻ",
         "freeze_card_description": "Tạm dừng mọi chi tiêu trên thẻ của bạn",
@@ -7992,8 +8025,8 @@
       "token_label": "Token"
     },
     "cashback_screen": {
-      "title": "Hoàn tiền",
-      "available_cashback": "Hoàn tiền khả dụng",
+      "title": "mUSD Back",
+      "available_cashback": "Available mUSD",
       "network_fee": "Phí mạng",
       "expected_to_receive": "Dự kiến nhận được",
       "withdraw": "Rút tiền",
@@ -8001,11 +8034,11 @@
       "withdrawal_initiated": "Đã khởi tạo lệnh rút tiền",
       "withdrawal_success": "Rút tiền thành công",
       "withdrawal_failed": "Rút tiền thất bại. Vui lòng thử lại.",
-      "no_cashback": "Không có hoàn tiền khả dụng",
-      "loading_error": "Không thể tải thông tin hoàn tiền. Vui lòng thử lại.",
+      "no_cashback": "No mUSD back available",
+      "loading_error": "Failed to load mUSD back. Please try again.",
       "funding_required": {
         "title": "Set up Linea funding",
-        "description": "You need at least one approved funding source on Linea before redeeming cashback.",
+        "description": "You need at least one approved funding source on Linea before redeeming mUSD back.",
         "confirm_button_label": "Set up funding"
       }
     },
@@ -8128,6 +8161,15 @@
     "optin_error": {
       "title": "Đăng ký tham gia thất bại",
       "description": "Kiểm tra kết nối của bạn và thử lại."
+    },
+    "notifications_nudge": {
+      "title": "Don't miss out",
+      "description": "Enable notifications to stay informed on campaigns.",
+      "turn_on_button": "Turn on",
+      "loading": "Enabling notifications...",
+      "loading_description": "This may take a moment.",
+      "enable_error": "Failed to enable notifications",
+      "success": "Notifications enabled"
     },
     "version_guard": {
       "title": "Yêu cầu cập nhật",
@@ -8390,7 +8432,15 @@
     "active_boosts_title": "Tính năng tăng cường đang hoạt động",
     "season_1": "Mùa 1",
     "musd": {
-      "page_title": "mUSD",
+      "page_title": "mUSD calculator",
+      "hero_hold": "Hold mUSD.",
+      "hero_earn": "Earn",
+      "yearly_positive_prefix": "+",
+      "earnings_per_year_suffix": "/yr",
+      "earnings_per_month_suffix": "/mo",
+      "earnings_per_day_suffix": "/day claimable daily",
+      "slider_amount_label": "Amount",
+      "disclaimer_calculator": "Estimate based on 3% bonus. Rate may change. Claimable anytime.",
       "buy_button": "Mua mUSD",
       "swap_button": "Hoán đổi sang mUSD"
     },
@@ -8620,7 +8670,11 @@
       "stats_qualify_for_rank_description": "Trade {{notionalRemaining}} more in notional volume to become eligible.",
       "stats_error_title": "Unable to load stats",
       "stats_error_description": "We had a problem loading your stats. Please try again.",
-      "stats_retry": "Retry"
+      "stats_retry": "Retry",
+      "completed_label_total_participants": "Total participants",
+      "completed_label_total_volume": "Total volume",
+      "completed_label_top_pnl": "Top PnL",
+      "completed_label_winners": "Winners"
     },
     "campaigns_preview": {
       "title": "Chiến dịch",
@@ -8646,47 +8700,47 @@
       "retry_button": "Thử lại",
       "refreshing": "Đang làm mới..."
     },
+    "campaign_winning": {
+      "you_won": "You won",
+      "rank_label": "{{place}} place",
+      "email_instructions": "Email {{email}} with your code to claim your prize.",
+      "open_mail": "Open mail",
+      "skip_for_now": "Skip for now",
+      "mail_subject": "{{campaignName}} prize claim",
+      "mail_body": "My winning code: {{code}}",
+      "winning_code": "Winning code",
+      "close_a11y": "Close"
+    },
     "campaign_outcome_banner": {
       "winner_pending": {
-        "title": "Bạn đã thắng!",
-        "description": "Xác minh mã trúng thưởng và nhận giải thưởng hôm nay.",
-        "a11y": "Xem chi tiết"
+        "title": "You won!",
+        "description": "Verify your winning code and claim your prize today.",
+        "a11y": "View details"
       },
       "participant_pending": {
-        "title": "Chiến dịch đã kết thúc.",
-        "description": "Chúng tôi đang xác định kết quả. Hãy quay lại sau."
+        "title": "Campaign has ended.",
+        "description": "We're determining the results. Check back soon."
       },
       "participant_finalized": {
-        "title": "Đã có kết quả chiến dịch.",
-        "description": "Lần này bạn đã không giành chiến thắng. Hãy kiểm tra bảng xếp hạng để xem bạn đứng ở vị trí nào."
+        "title": "Campaign results are in.",
+        "description": "You didn't win this time. Check the leaderboard to see where you finished."
       },
       "winner_finalized": {
-        "title": "Bạn là người chiến thắng đã được xác nhận!",
-        "description": "Phần thưởng của bạn đang được gửi — chúng tôi sẽ sớm liên hệ với bạn."
+        "title": "You're a confirmed winner!",
+        "description": "Your reward is on its way — we'll be in touch shortly."
       }
     },
     "campaign_outcome_toast": {
       "winner": {
-        "title": "Bạn đã thắng 💰",
-        "description": "Nhận thưởng từ {{campaignName}} hôm nay.",
-        "cta": "Xem chi tiết"
+        "title": "You won 💰",
+        "description": "Claim your prize from the {{campaignName}} today.",
+        "cta": "View details"
       },
       "non_winner": {
-        "title": "Đã có kết quả 🏅",
-        "description": "Xem thứ hạng của bạn trong {{campaignName}}.",
-        "cta": "Xem"
+        "title": "The results are in 🏅",
+        "description": "See your ranking in the {{campaignName}}.",
+        "cta": "View"
       }
-    },
-    "campaign_winning": {
-      "you_won": "Bạn đã thắng",
-      "rank_label": "Hạng {{place}}",
-      "email_instructions": "Gửi email đến {{email}} kèm mã của bạn để nhận thưởng.",
-      "open_mail": "Mở thư",
-      "skip_for_now": "Bỏ qua bây giờ",
-      "mail_subject": "{{campaignName}} – nhận thưởng",
-      "mail_body": "Mã trúng thưởng của tôi: {{code}}",
-      "winning_code": "Mã trúng thưởng",
-      "close_a11y": "Đóng"
     }
   },
   "time": {
@@ -8809,8 +8863,8 @@
     "search_placeholder": "Tìm kiếm token, trang web, URL",
     "cancel": "Hủy",
     "perps": "Vĩnh cửu",
-    "rwa_perps_section": "Thị trường",
-    "macro_stocks_commodity_perps": "Stocks & commodities",
+    "rwa_perps_section": "Perps",
+    "macro_stocks_commodity_perps": "Perps",
     "macro_pill_stocks": "Cổ phiếu",
     "macro_pill_commodities": "Hàng hóa",
     "rwa_pill_commodities": "Hàng hóa",
@@ -8975,21 +9029,29 @@
   },
   "homepage": {
     "sections": {
-      "cash": "Tài chính",
-      "cash_empty_description": "Bạn chưa có mUSD. Hãy chuyển đổi đồng ổn định sang mUSD từ mục Tài chính trên trang chủ.",
-      "cash_empty_description_network_filter": "Không có mUSD trên mạng này. Hãy chuyển mạng để xem mUSD của bạn.",
-      "cash_empty_state": {
-        "get_started": "Bắt đầu",
+      "money": "Money",
+      "money_empty_description": "You don't have any mUSD yet. Convert stablecoins to mUSD from the Money section on the homepage.",
+      "money_empty_description_network_filter": "No mUSD on this network. Switch network to see your mUSD.",
+      "money_empty_state": {
+        "get_started": "Get started",
         "earn_apy": "Earn {{percentage}}% APY"
       },
-      "cash_filled_state": {
-        "add": "Thêm",
-        "apy": "APY {{percentage}}%"
+      "money_filled_state": {
+        "add": "Add",
+        "apy": "{{percentage}}% APY"
       },
       "tokens": "Token",
+      "perps": "Perps",
+      "related_assets": "Related Assets",
       "perpetuals": "Hợp đồng vĩnh cửu",
       "predictions": "Dự đoán",
       "whats_happening": "Tình hình hiện nay",
+      "whats_happening_ai": "AI",
+      "whats_happening_impact": {
+        "bullish": "Bullish",
+        "bearish": "Bearish",
+        "neutral": "Neutral"
+      },
       "top_traders": "Nhà giao dịch hàng đầu",
       "whats_happening_categories": {
         "geopolitical": "Địa chính trị",

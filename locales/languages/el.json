@@ -709,7 +709,11 @@
     "smart_contract_address": "Διεύθυνση έξυπνου συμβολαίου",
     "smart_contract_address_warning": "Η διεύθυνση παραλήπτη ενδέχεται να μην υποστηρίζει άμεσες μεταφορές tokens, γεγονός που μπορεί να οδηγήσει σε απώλεια κεφαλαίων. Συνεχίστε μόνο εάν είστε βέβαιοι ότι το συγκεκριμένο συμβόλαιο μπορεί να λάβει τη μεταφορά.",
     "i_understand": "Κατανοώ",
-    "cancel": "Άκυρο"
+    "cancel": "Άκυρο",
+    "new_address_title": "New address",
+    "new_address_message": "You're sending to this address for the first time. Make sure that it's correct before you continue:",
+    "alert_navigation_previous": "Previous alert",
+    "alert_navigation_next": "Next alert"
   },
   "unified_ramp": {
     "networks_filter_bar": {
@@ -2675,6 +2679,22 @@
     "token_is_needed_to_continue": "Απαιτείται τo {{tokenSymbol}} για να συνεχίσετε",
     "fund_your_wallet": "Χρηματοδοτήστε το πορτοφόλι σας",
     "get_ready_for_web3": "Ετοιμάστε το πορτοφόλι σας για χρήση στο web3",
+    "home_onboarding_steps": {
+      "header": "Steps",
+      "get_started_title": "Get started on MetaMask",
+      "fund_title": "Fund your wallet",
+      "fund_subtitle": "No one likes an empty wallet. Easily add funds to start trading.",
+      "fund_primary": "Add funds",
+      "trade_title": "Make your first trade",
+      "trade_subtitle": "Trade trending tokens across multiple networks  to grow your portfolio.",
+      "trade_primary": "Trade",
+      "notifications_title": "Turn on notifications",
+      "notifications_subtitle": "Stay up to date on shifts in the market to make the best moves for your portfolio.",
+      "notifications_primary": "Turn on",
+      "skip": "Skip",
+      "progress_a11y": "Step {{current}} of {{total}}",
+      "balance_loading_a11y": "Loading wallet balance"
+    },
     "add_funds": "Προσθήκη κεφαλαίων",
     "next": "Επόμενο",
     "buy_asset": "Αγοράστε {{asset}}",
@@ -6472,10 +6492,17 @@
       },
       "education": {
         "heading": "ΚΕΡΔΙΣΤΕ {{percentage}}% ΣΤΑ\nSTABLECOINS",
-        "description": "Μετατρέψτε τα stablecoins σε mUSD και θα κερδίσετε έως και {{percentage}}% μπόνους ετησίως που μπορείτε να εξαργυρώσετε καθημερινά.",
+        "description": "Convert your stablecoins to mUSD and earn a {{percentage}}% annualized bonus.",
         "terms_apply": "Ισχύουν όροι.",
         "primary_button": "Ξεκινήστε",
-        "secondary_button": "Όχι τώρα"
+        "secondary_button": "Όχι τώρα",
+        "checklist": {
+          "dollar_backed": "Dollar-backed",
+          "no_lockups": "No lockups",
+          "daily_bonus": "Daily bonus",
+          "metamask_stablecoins": "MetaMask stablecoins",
+          "no_metamask_fee": "No MetaMask fee"
+        }
       },
       "buy_musd": "Αγοράστε mUSD",
       "get_musd": "Αποκτήστε mUSD",
@@ -6519,6 +6546,7 @@
   },
   "money": {
     "title": "Money",
+    "your_balance": "Your balance",
     "apy_label": "{{percentage}}% APY",
     "apy_info_label": "Πληροφορίες για την Ετήσια Ποσοστιαία Απόδοση (APY)",
     "onboarding": {
@@ -6539,9 +6567,9 @@
       "card": "Κάρτα"
     },
     "earnings": {
-      "title": "Κέρδη",
-      "lifetime": "Συνολικά κέρδη",
-      "projected": "Εκτιμώμενα κέρδη",
+      "title": "Estimated earnings",
+      "estimated_monthly": "Monthly",
+      "estimated_yearly": "Annual",
       "info_label": "Earnings info"
     },
     "how_it_works": {
@@ -6551,6 +6579,12 @@
     },
     "musd_row": {
       "add": "Προσθήκη"
+    },
+    "balance_card": {
+      "label": "Money balance",
+      "add": "Add",
+      "info_sheet_title": "Money Home",
+      "info_sheet_body": "Your dollar-backed balance, always available. Spend it, send it, or trade it anytime. We don't calculate this into your total account balance."
     },
     "potential_earnings": {
       "title": "Κερδίστε από τα κρυπτονομίσματά σας",
@@ -6565,11 +6599,11 @@
       "subtitle": "Ξοδέψτε τα χρήματά σας όπου θέλετε.",
       "virtual_card": "Εικονική κάρτα",
       "metal_card": "Μεταλλική κάρτα",
-      "cashback": "{{percentage}}% επιστροφή χρημάτων",
+      "cashback": "{{percentage}}% mUSD back",
       "get_now": "Αποκτήστε την τώρα",
       "link_title": "Σύνδεση της MetaMask Card",
       "link_subtitle": "Ξοδέψτε το υπόλοιπο του λογαριασμού σας και κερδίστε.",
-      "link_bullet_cashback": "Έως 3% επιστροφή μετρητών",
+      "link_bullet_cashback": "Up to 3% mUSD back",
       "link_bullet_apy": "Έως {{apy}}% APY",
       "link_card": "Σύνδεση κάρτας"
     },
@@ -6579,7 +6613,7 @@
       "benefit_dollar_backed": "Κρατήστε τα χρήματά σας ασφαλή σε mUSD, ένα stablecoin με αναλογία 1:1 σε δολάρια",
       "benefit_liquidity": "Πλήρης ρευστότητα χωρίς δεσμεύσεις, ώστε να μπορείτε να κάνετε συναλλαγές ή ανάληψη οποιαδήποτε στιγμή",
       "benefit_spend_prefix": "Κάντε αγορές με τη MetaMask Card σε 150M+ σημεία και κερδίστε ",
-      "benefit_spend_cashback": "1–3% επιστροφή χρημάτων",
+      "benefit_spend_cashback": "1-3% mUSD back",
       "benefit_transfer": "Μεταφέρετε χρήματα σε οποιοδήποτε από τα πορτοφόλια σας στο MetaMask",
       "benefit_global": "Στείλτε και λάβετε χρήματα παγκοσμίως",
       "learn_more": "Μάθετε περισσότερα"
@@ -6618,12 +6652,8 @@
       "learn_more": "Μάθετε περισσότερα"
     },
     "earnings_tooltip": {
-      "title": "Κέρδη",
-      "lifetime_heading": "Συνολικά κέρδη",
-      "lifetime_body": "The total yield you've earned since opening your Money account.",
-      "projected_heading": "Εκτιμώμενα κέρδη",
-      "projected_body": "Μια εκτιμηση των ετήσιων κερδών σας, με βάση το τρέχον υπόλοιπο και τον ρυθμό απόδοσης.",
-      "disclaimer": "Projection assumes {{percentage}}% Annual Percentage Yield (APY) remains unchanged for 1 year. APY is variable and may change due to various factors. No guarantee of return."
+      "title": "Estimated earnings",
+      "body": "An estimate of how much you could earn over a period based on your current balance and today's APY. Estimates are not guaranteed returns and remain subject to change."
     },
     "activity": {
       "title": "Δραστηριότητα",
@@ -6680,7 +6710,7 @@
       "faq_q7": "Μπορεί να αλλάξει το ποσοστό APY;",
       "faq_q8": "Είναι αυτός λογαριασμός αποταμίευσης ή λογαριασμός δαπανών;",
       "faq_q9": "Ποιος ελέγχει τα χρήματά μου;",
-      "faq_q10": "Τι επιστροφή μετρητών θα λάβω με την MetaMask Card;",
+      "faq_q10": "What mUSD back do I get with the MetaMask Card?",
       "sounds_good": "Εντάξει"
     }
   },
@@ -7260,6 +7290,9 @@
     "price_impact_warning_title": "Υψηλή επίδραση στην τιμή",
     "price_impact_error_title": "Πολύ μεγάλη επίδραση στην τιμή",
     "price_impact_error_description": "Θα χάσετε περίπου {{priceImpact}} από την τιμή αγοράς του token σε αυτή την ανταλλαγή. Δοκιμάστε με μικρότερο ποσό ή ένα κανάλι με μεγαλύτερη ρευστότητα για να βελτιώσετε την τιμή.",
+    "insufficient_native_reserve_cta": "Use max allowed",
+    "insufficient_native_reserve_message": "This network requires at least {{minimumReserve}} {{ticker}} to remain in your account. You can use a maximum of {{maxSwappable}} {{ticker}}",
+    "insufficient_native_reserve_title": "Minimum {{ticker}} reserve balance required",
     "token_warning_suspicious_banner": "Το {{token}} έχει χαρακτηριστεί ως ύποπτο token.",
     "token_warning_malicious_banner": "Το {{token}} είναι κακόβουλο token. Να είστε προσεκτικοί όταν αλληλεπιδράτε με αυτό.",
     "token_warning_modal_suspicious_title": "Ύποπτο token",
@@ -7616,17 +7649,17 @@
         "price": "Δωρεάν",
         "feature_1": "Εικονική κάρτα για Apple Pay και Google Pay",
         "feature_2": "Πληρώστε με κρυπτονομίσματα (USDC, USDT, WETH και άλλα)",
-        "feature_3": "1% επιστροφή σε USDC σε κάθε αγορά"
+        "feature_3": "1% mUSD back on every purchase"
       },
       "metal_card": {
         "name": "Metal Card",
         "price": "$199/έτος",
         "everything_in_virtual": "Όλα όσα περιλαμβάνει η εικονική κάρτα, καθώς και:",
         "feature_1": "Μεταλλική κάρτα υψηλής ποιότητας με χάραξη",
-        "feature_2": "3% επιστροφή χρημάτων στα πρώτα $10.000/έτος",
+        "feature_2": "3% mUSD back on first $10,000/year",
         "feature_3": "Χωρίς χρεώσεις για διεθνείς συναλλαγές"
       },
-      "earn_up_to_badge": "Κερδίστε έως και $300 επιστροφή χρημάτων κάθε χρόνο",
+      "earn_up_to_badge": "Earn up to $300 in mUSD back annually",
       "upgrade_to_metal_label": "Ή κάντε αναβάθμιση σε Μεταλλική κάρτα για 3× ανταμοιβές"
     },
     "review_order": {
@@ -7647,7 +7680,7 @@
     "order_completed": {
       "title": "Η ΔΙΑΔΙΚΑΣΙΑ ΕΚΔΟΣΗΣ ΤΗΣ ΚΑΡΤΑΣ ΣΑΣ\nΕΧΕΙ ΟΛΟΚΛΗΡΩΘΕΙ",
       "subtitle": "Θα φτάσει σε 4 έως 6 εβδομάδες.",
-      "description": "Ρυθμίστε την εικονική σας κάρτα και προσθέστε την στο ψηφιακό πορτοφόλι σας για να ξεκινήσετε να κερδίζετε ανταμοιβές.",
+      "description": "Set up your virtual card and add it to your digital wallet to start earning mUSD back.",
       "set_up_card_button": "Ρύθμιση κάρτας",
       "back_to_card_button": "Πίσω στην Κάρτα"
     },
@@ -7666,7 +7699,7 @@
     },
     "card_onboarding": {
       "title": "Ξοδέψτε \nκαι Κερδίστε",
-      "description": "Η MetaMask Card είναι ο πιο γρήγορος και \nεύκολος τρόπος για να ξοδέψετε τα κρυπτονομίσματά σας και \nνα κερδίσετε έως και 3% σε ανταμοιβές.",
+      "description": "The MetaMask Card is the fast and\neasy way to spend your crypto and\nearn up to 3% mUSD back.",
       "apply_now_button": "Ρύθμιση τώρα",
       "login_button": "Σύνδεση",
       "not_now_button": "Όχι τώρα",
@@ -7948,9 +7981,9 @@
         "card_tos_title": "Όροι και προϋποθέσεις",
         "order_metal_card": "Metal Card",
         "order_metal_card_description": "Παραγγείλετε τώρα τη φυσική Metal Card σας",
-        "cashback": "Επιστροφή χρημάτων",
-        "cashback_description": "Κερδίστε 1% επιστροφή σε κάθε συναλλαγή",
-        "cashback_description_metal": "Κερδίστε 3% επιστροφή σε κάθε συναλλαγή",
+        "cashback": "mUSD Back",
+        "cashback_description": "Earn 1% mUSD back on all spending",
+        "cashback_description_metal": "Earn 3% mUSD back on all spending",
         "freeze_card": "Πάγωμα κάρτας",
         "unfreeze_card": "Ξεπάγωμα κάρτας",
         "freeze_card_description": "Παύση όλων των δαπανών στην κάρτα σας",
@@ -7992,8 +8025,8 @@
       "token_label": "Token"
     },
     "cashback_screen": {
-      "title": "Επιστροφή χρημάτων",
-      "available_cashback": "Διαθέσιμη επιστροφή χρημάτων",
+      "title": "mUSD Back",
+      "available_cashback": "Available mUSD",
       "network_fee": "Τέλη δικτύου",
       "expected_to_receive": "Αναμένεται να λάβετε",
       "withdraw": "Ανάληψη",
@@ -8001,11 +8034,11 @@
       "withdrawal_initiated": "Η διαδικασία ανάληψης ξεκίνησε",
       "withdrawal_success": "Η ανάληψη ολοκληρώθηκε με επιτυχία",
       "withdrawal_failed": "Η ανάληψη απέτυχε. Προσπαθήστε ξανά.",
-      "no_cashback": "Δεν υπάρχει διαθέσιμη επιστροφή χρημάτων",
-      "loading_error": "Αποτυχία φόρτωσης της επιστροφής χρημάτων. Προσπαθήστε ξανά.",
+      "no_cashback": "No mUSD back available",
+      "loading_error": "Failed to load mUSD back. Please try again.",
       "funding_required": {
         "title": "Set up Linea funding",
-        "description": "You need at least one approved funding source on Linea before redeeming cashback.",
+        "description": "You need at least one approved funding source on Linea before redeeming mUSD back.",
         "confirm_button_label": "Set up funding"
       }
     },
@@ -8128,6 +8161,15 @@
     "optin_error": {
       "title": "Αποτυχία συμμετοχής",
       "description": "Ελέγξτε τη σύνδεσή σας και προσπαθήστε ξανά."
+    },
+    "notifications_nudge": {
+      "title": "Don't miss out",
+      "description": "Enable notifications to stay informed on campaigns.",
+      "turn_on_button": "Turn on",
+      "loading": "Enabling notifications...",
+      "loading_description": "This may take a moment.",
+      "enable_error": "Failed to enable notifications",
+      "success": "Notifications enabled"
     },
     "version_guard": {
       "title": "Απαιτείται ενημέρωση",
@@ -8390,7 +8432,15 @@
     "active_boosts_title": "Ενεργές ενισχύσεις",
     "season_1": "Περίοδος 1",
     "musd": {
-      "page_title": "mUSD",
+      "page_title": "mUSD calculator",
+      "hero_hold": "Hold mUSD.",
+      "hero_earn": "Earn",
+      "yearly_positive_prefix": "+",
+      "earnings_per_year_suffix": "/yr",
+      "earnings_per_month_suffix": "/mo",
+      "earnings_per_day_suffix": "/day claimable daily",
+      "slider_amount_label": "Amount",
+      "disclaimer_calculator": "Estimate based on 3% bonus. Rate may change. Claimable anytime.",
       "buy_button": "Αγοράστε mUSD",
       "swap_button": "Ανταλλαγή σε mUSD"
     },
@@ -8620,7 +8670,11 @@
       "stats_qualify_for_rank_description": "Trade {{notionalRemaining}} more in notional volume to become eligible.",
       "stats_error_title": "Unable to load stats",
       "stats_error_description": "We had a problem loading your stats. Please try again.",
-      "stats_retry": "Retry"
+      "stats_retry": "Retry",
+      "completed_label_total_participants": "Total participants",
+      "completed_label_total_volume": "Total volume",
+      "completed_label_top_pnl": "Top PnL",
+      "completed_label_winners": "Winners"
     },
     "campaigns_preview": {
       "title": "Καμπάνιες",
@@ -8646,47 +8700,47 @@
       "retry_button": "Επανάληψη",
       "refreshing": "Ανανεώνεται..."
     },
+    "campaign_winning": {
+      "you_won": "You won",
+      "rank_label": "{{place}} place",
+      "email_instructions": "Email {{email}} with your code to claim your prize.",
+      "open_mail": "Open mail",
+      "skip_for_now": "Skip for now",
+      "mail_subject": "{{campaignName}} prize claim",
+      "mail_body": "My winning code: {{code}}",
+      "winning_code": "Winning code",
+      "close_a11y": "Close"
+    },
     "campaign_outcome_banner": {
       "winner_pending": {
-        "title": "Κερδίσατε!",
-        "description": "Επαληθεύστε τον κωδικό νίκης σας και διεκδικήστε το βραβείο σας σήμερα.",
-        "a11y": "Προβολή λεπτομερειών"
+        "title": "You won!",
+        "description": "Verify your winning code and claim your prize today.",
+        "a11y": "View details"
       },
       "participant_pending": {
-        "title": "Η καμπάνια έχει λήξει.",
-        "description": "Επεξεργαζόμαστε τα αποτελέσματα. Ελέγξτε ξανά σύντομα."
+        "title": "Campaign has ended.",
+        "description": "We're determining the results. Check back soon."
       },
       "participant_finalized": {
-        "title": "Τα αποτελέσματα της καμπάνιας είναι έτοιμα.",
-        "description": "Δεν κερδίσατε αυτή τη φορά. Δείτε τον πίνακα κατάταξης για να δείτε σε ποια θέση τερματίσατε."
+        "title": "Campaign results are in.",
+        "description": "You didn't win this time. Check the leaderboard to see where you finished."
       },
       "winner_finalized": {
-        "title": "Είστε επιβεβαιωμένος νικητής!",
-        "description": "Το βραβείο σας είναι καθ’ οδόν — θα επικοινωνήσουμε μαζί σας σύντομα."
+        "title": "You're a confirmed winner!",
+        "description": "Your reward is on its way — we'll be in touch shortly."
       }
     },
     "campaign_outcome_toast": {
       "winner": {
-        "title": "Κερδίσατε 💰",
-        "description": "Διεκδικήστε το βραβείο σας από την {{campaignName}} σήμερα.",
-        "cta": "Δείτε λεπτομέρειες"
+        "title": "You won 💰",
+        "description": "Claim your prize from the {{campaignName}} today.",
+        "cta": "View details"
       },
       "non_winner": {
-        "title": "Τα αποτελέσματα είναι έτοιμα 🏅",
-        "description": "Δείτε την κατάταξή σας στην {{campaignName}}.",
-        "cta": "Προβολή"
+        "title": "The results are in 🏅",
+        "description": "See your ranking in the {{campaignName}}.",
+        "cta": "View"
       }
-    },
-    "campaign_winning": {
-      "you_won": "Κερδίσατε",
-      "rank_label": "θέση {{place}}",
-      "email_instructions": "Στείλτε email στο {{email}} με τον κωδικό σας για να διεκδικήσετε το βραβείο σας.",
-      "open_mail": "Άνοιγμα αλληλογραφίας",
-      "skip_for_now": "Παράλειψη για τώρα",
-      "mail_subject": "{{campaignName}} — διεκδίκηση βραβείου",
-      "mail_body": "Κωδικός νίκης: {{code}}",
-      "winning_code": "Κωδικός νίκης",
-      "close_a11y": "Κλείσιμο"
     }
   },
   "time": {
@@ -8809,8 +8863,8 @@
     "search_placeholder": "Αναζήτηση token, ιστότοπων, διευθύνσεων URL",
     "cancel": "Άκυρο",
     "perps": "Συμβ.αορ.",
-    "rwa_perps_section": "Αγορές",
-    "macro_stocks_commodity_perps": "Stocks & commodities",
+    "rwa_perps_section": "Perps",
+    "macro_stocks_commodity_perps": "Perps",
     "macro_pill_stocks": "Μετοχές",
     "macro_pill_commodities": "Εμπορεύματα",
     "rwa_pill_commodities": "Εμπορεύματα",
@@ -8975,21 +9029,29 @@
   },
   "homepage": {
     "sections": {
-      "cash": "Οικονομικά",
-      "cash_empty_description": "Δεν έχετε ακόμη mUSD. Μετατρέψτε stablecoins σε mUSD από την ενότητα Οικονομικά στην αρχική σελίδα.",
-      "cash_empty_description_network_filter": "Δεν έχετε mUSD σε αυτό το δίκτυο. Αλλάξτε δίκτυο για να δείτε τα mUSD σας.",
-      "cash_empty_state": {
-        "get_started": "Ξεκινήστε",
+      "money": "Money",
+      "money_empty_description": "You don't have any mUSD yet. Convert stablecoins to mUSD from the Money section on the homepage.",
+      "money_empty_description_network_filter": "No mUSD on this network. Switch network to see your mUSD.",
+      "money_empty_state": {
+        "get_started": "Get started",
         "earn_apy": "Earn {{percentage}}% APY"
       },
-      "cash_filled_state": {
-        "add": "Προσθήκη",
+      "money_filled_state": {
+        "add": "Add",
         "apy": "{{percentage}}% APY"
       },
       "tokens": "Token",
+      "perps": "Perps",
+      "related_assets": "Related Assets",
       "perpetuals": "Συμβόλαια αορίστου διάρκειας",
       "predictions": "Προβλέψεις",
       "whats_happening": "Τι συμβαίνει",
+      "whats_happening_ai": "AI",
+      "whats_happening_impact": {
+        "bullish": "Bullish",
+        "bearish": "Bearish",
+        "neutral": "Neutral"
+      },
       "top_traders": "Κορυφαίοι Traders",
       "whats_happening_categories": {
         "geopolitical": "Γεωπολιτικά",
