@@ -33700,6 +33700,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-yaml@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "js-yaml@npm:4.3.0"
+  dependencies:
+    argparse: "npm:^2.0.1"
+  bin:
+    js-yaml: bin/js-yaml.js
+  checksum: 10/2bcec3a8118d7f744badeb04e14366578d234a736f353d41fe35d2305e4ce2409a8e041d277f07cd6bbc8aaa12128d650a68ce43247072519bede20962d2126f
+  languageName: node
+  linkType: hard
+
 "js2xmlparser2@npm:^0.x":
   version: 0.2.0
   resolution: "js2xmlparser2@npm:0.2.0"
@@ -35696,7 +35707,7 @@ __metadata:
     jest-junit: "npm:^15.0.0"
     jetifier: "npm:2.0.0"
     js-sha3: "npm:0.9.3"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.3.0"
     koa: "npm:^2.14.2"
     lint-staged: "npm:10.5.4"
     listr2: "npm:^8.0.2"
